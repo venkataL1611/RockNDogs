@@ -1,0 +1,23 @@
+body {
+  background-image: url("http://wallpaperen.com/wp-content/uploads/2018/01/beautiful-dog-background-images-red-dog-bone-background-dog-background-images.jpg") ;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+.img-thumbnail img{
+  max-height: 200px;
+}
+.img-thumbnail .price{
+  font-weight: bold;
+  font-size:16px;
+}
+.img-thumbnail .Description{
+  color: #7f7f7f;
+}
+.product{
+  background-color: seashell;
+  padding:50px;
+}
