@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const mocha=require('mocha');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var mocha=require('mocha');
 //mongoose.Promise=global.Promise;
 //(function(done){
     mongoose.connect('mongodb://localhost:27017/dog');
@@ -15,13 +15,13 @@ const mocha=require('mocha');
 
 // Create a Schema and a Model
 
-const DogfoodSchema = new Schema({
+var DogfoodSchema = new Schema({
     imagepath: String,
     title: String,
     description:String,
-    Price: Number
+    Price: String
 });
 
-const canine = mongoose.model('Canine', DogfoodSchema);
+var canine = mongoose.model('Canine', DogfoodSchema);
 
 module.exports = canine;

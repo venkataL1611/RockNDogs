@@ -1,7 +1,7 @@
-const mocha=require('mocha');
-const assert=require('assert');
+var mocha=require('mocha');
+var assert=require('assert');
 
-const canine= require('../models/dogfood');
+var canine= require('../models/dogfood');
 
 // Describe our tests
    /*describe('Saving products', function(){
@@ -9,7 +9,7 @@ const canine= require('../models/dogfood');
     // Create tests
     it('Saves a record to the database', function(done){
         setTimeout(done, 300);*/
-        const diets = [new canine({
+        var diets = [new canine({
             imagepath: 'https://ll-us-i5.wal.co/asr/7e164e0f-c954-4c54-b0b1-4452e095095a_1.5afd7033e2652476d14f7fdb292b5a88.jpeg-ec507657aaec903c7d27c8cefe8f3d3b10690f01-optim-450x450.jpg?odnBg=FFFFFF',
             title:'Pedigree',
             description:'Pedigree is a dog food',

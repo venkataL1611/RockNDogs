@@ -8,7 +8,7 @@ var mongoose=require('mongoose');
 var session=require('express-session');
 var passport=require('passport');
 var flash=require('connect-flash');
-const mocha=require('mocha');
+var mocha=require('mocha');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

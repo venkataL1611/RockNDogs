@@ -13,39 +13,45 @@
     <session id="-699250402">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="1" />
-          <entry key="hbs" value="7" />
-          <entry key="js" value="8" />
+          <entry key="hbs" value="10" />
+          <entry key="js" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="1" />
-          <entry key="Handlebars/Mustache" value="6" />
-          <entry key="JavaScript" value="8" />
+          <entry key="Handlebars/Mustache" value="9" />
+          <entry key="JavaScript" value="12" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="18" />
-          <entry key="hbs" value="593" />
-          <entry key="js" value="2075" />
+          <entry key="hbs" value="1996" />
+          <entry key="js" value="2481" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="18" />
-          <entry key="Handlebars/Mustache" value="593" />
-          <entry key="JavaScript" value="2075" />
+          <entry key="Handlebars/Mustache" value="1996" />
+          <entry key="JavaScript" value="2481" />
         </counts>
       </usages-collector>
     </session>
@@ -64,8 +70,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+            <state relative-caret-position="163">
+              <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/shop/index.hbs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="663">
+              <caret line="39" column="70" selection-start-line="39" selection-start-column="70" selection-end-line="39" selection-end-column="70" />
+              <folding>
+                <element signature="e#1510#1516#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/dogfood.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -74,25 +101,30 @@
         <entry file="file://$PROJECT_DIR$/views/user/profile.hbs">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="9" selection-start-column="9" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/models/user.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+              <caret column="20" selection-start-column="20" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/shop/index.hbs">
+        <entry file="file://$PROJECT_DIR$/models/user.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
-              <caret line="2" column="43" selection-start-line="1" selection-start-column="8" selection-end-line="2" selection-end-column="43" />
+              <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/user/signin.hbs">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/seed/product-seeder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-201">
+              <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -109,22 +141,21 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="12" column="44" lean-forward="true" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/dogfood.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="23" lean-forward="true" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+            <state relative-caret-position="255">
+              <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>const</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>var</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/RockNDogs" />
@@ -134,12 +165,15 @@
       <list>
         <option value="$PROJECT_DIR$/views/user/user.hbs" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
-        <option value="$PROJECT_DIR$/config/passport.js" />
-        <option value="$PROJECT_DIR$/models/user.js" />
         <option value="$PROJECT_DIR$/views/user/signup.hbs" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/views/user/profile.hbs" />
+        <option value="$PROJECT_DIR$/seed/product-seeder.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/models/user.js" />
+        <option value="$PROJECT_DIR$/config/passport.js" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/models/dogfood.js" />
+        <option value="$PROJECT_DIR$/views/shop/index.hbs" />
       </list>
     </option>
   </component>
@@ -152,16 +186,14 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/RockNDogs/node_modules" />
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
-      <path value="$PROJECT_DIR$/RockNDogs/package.json" />
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="15" />
     <option name="y" value="30" />
     <option name="width" value="1890" />
@@ -183,18 +215,12 @@
             <path>
               <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
               <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="stylesheets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
@@ -204,7 +230,18 @@
             <path>
               <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
               <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
+              <item name="seed" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shopping-cart" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="shop" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="shopping-cart" type="b2602c69:ProjectViewProjectNode" />
@@ -224,6 +261,11 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540043216725" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -237,27 +279,36 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="All Features in: shopping-cart" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java" temporary="true" nameIsGenerated="true">
-      <option name="CUCUMBER_CORE_VERSION" value="3" />
-      <option name="FILE_PATH" value="$PROJECT_DIR$" />
-      <option name="MAIN_CLASS_NAME" value="cucumber.api.cli.Main" />
-      <module name="shopping-cart" />
-      <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm3SMFormatter" />
-      <option name="SUGGESTED_NAME" value="All Features in: shopping-cart" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cucumber.api.cli.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+  <component name="RunManager" selected="Node.js.user.js">
+    <configuration name="profile.hbs" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/shopping-cart/views/user/profile.hbs">
+      <method v="2" />
     </configuration>
+    <configuration name="app.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="app.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/routes">
+      <method v="2" />
+    </configuration>
+    <configuration name="passport.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="passport.js" working-dir="$PROJECT_DIR$/config">
+      <method v="2" />
+    </configuration>
+    <configuration name="user.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="user.js" working-dir="$PROJECT_DIR$/models">
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.index.js" />
+      <item itemvalue="Node.js.app.js" />
+      <item itemvalue="JavaScript Debug.profile.hbs" />
+      <item itemvalue="Node.js.passport.js" />
+      <item itemvalue="Node.js.user.js" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Cucumber java.All Features in: shopping-cart" />
+        <item itemvalue="Node.js.user.js" />
+        <item itemvalue="Node.js.passport.js" />
+        <item itemvalue="JavaScript Debug.profile.hbs" />
+        <item itemvalue="Node.js.app.js" />
+        <item itemvalue="Node.js.index.js" />
       </list>
     </recent_temporary>
   </component>
@@ -273,11 +324,22 @@
       <updated>1539972358802</updated>
       <workItem from="1539972364055" duration="186000" />
       <workItem from="1539972596434" duration="13620000" />
+      <workItem from="1540093472234" duration="18000" />
+      <workItem from="1540657638098" duration="678000" />
+      <workItem from="1540658650265" duration="432000" />
+      <workItem from="1540659390478" duration="1271000" />
+      <workItem from="1540674342517" duration="6069000" />
+      <workItem from="1540692172820" duration="4573000" />
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="All_Features_in__shopping-cart - 2018.10.27 at 12h 49m 14s.xml">
+      <configuration name="All Features in: shopping-cart" configurationId="CucumberJavaRunConfigurationType" />
+    </history-entry>
+  </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13806000" />
+    <option name="totallyTimeSpent" value="26847000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -289,10 +351,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2631579" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.272655" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -302,15 +364,17 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3291815" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3285968" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32740214" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3285968" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.37544483" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -322,7 +386,7 @@
       <window_info anchor="right" id="Maven Projects" order="8" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2534413" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.272655" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -332,15 +396,17 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3291815" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32740214" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3285968" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.37544483" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -359,9 +425,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/user/signin.hbs">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/layouts/layout.hbs">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -372,10 +435,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/shop/index.hbs">
+    <entry file="file://$PROJECT_DIR$/node_modules/passport/lib/authenticator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="43" selection-start-line="1" selection-start-column="8" selection-end-line="2" selection-end-column="43" />
+        <state relative-caret-position="108">
+          <caret line="163" selection-start-line="163" selection-end-line="163" />
         </state>
       </provider>
     </entry>
@@ -386,19 +449,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="12" column="44" lean-forward="true" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/user/profile.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="9" selection-start-column="9" selection-end-column="9" />
+          <caret column="20" selection-start-column="20" selection-end-column="20" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/user/signin.hbs">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/config/passport.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -407,26 +473,117 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        <state relative-caret-position="163">
+          <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models/dogfood.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="23" lean-forward="true" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        <state relative-caret-position="171">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/user.js">
+    <entry file="file://$PROJECT_DIR$/views/shop/index.hbs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+        <state relative-caret-position="663">
+          <caret line="39" column="70" selection-start-line="39" selection-start-column="70" selection-end-line="39" selection-end-column="70" />
+          <folding>
+            <element signature="e#1510#1516#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/seed/product-seeder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-201">
+          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>shopping-cart</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

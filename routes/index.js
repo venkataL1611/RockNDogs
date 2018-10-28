@@ -20,13 +20,16 @@ router.get('/', function(req, res, next) {
 router.get('/user/signup',function(req,res,next){
     res.render('user/signup',{csrfToken:req.csrfToken()})
 });
-router.post('user/signup',passport.authenticate('local.signup',{
-  successRedirect:'user/profile',
-  failureRedirect:'user/signup',
+router.post('/user/signup',passport.authenticate('local.signup',{
+  successRedirect:'./profile',
+  failureRedirect:'./signup',
+    successFlash:true,
     failureFlash:true
 }));
-router.get('user/profile',function(req,res,next) {
+/*router.post('/user/signup',
+    passport.authenticate('local.signup', { successRedirect: './profile',
+        failureRedirect: './signup' }));*/
+router.get('/user/profile',function(req,res,next) {
     res.render('user/profile');
-}
-);
+});
 module.exports = router;
