@@ -15,9 +15,18 @@ a {
   font-size:16px;
 }
 .img-thumbnail .Description{
-  color: #7f7f7f;
+  color: black ;
 }
 .product{
   background-color: seashell;
   padding:50px;
+}
+.price{
+  padding-bottom: 10px;
+  font-weight: bolder;
+  font-variant-caps: normal;
+}
+.Description{
+  font-weight: bolder;
+
 }
