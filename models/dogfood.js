@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+    mongoosastic=require('mongoosastic'),
+    Schema = mongoose.Schema;
 var mocha=require('mocha');
 //mongoose.Promise=global.Promise;
 //(function(done){
-    mongoose.connect('mongodb://localhost:27017/dog');
+    mongoose.connect('mongodb://localhost:27017/dog',  { useNewUrlParser: true });
     mongoose.connection.once('open',function(){
         console.log('Connection has been made');
         //done();
@@ -17,11 +18,39 @@ var mocha=require('mocha');
 
 var DogfoodSchema = new Schema({
     imagepath: String,
-    title: String,
-    description:String,
+    title: { type: String, es_indexed:true },
+    description: String,
     Price: String
 });
 
-var canine = mongoose.model('Canine', DogfoodSchema);
+DogfoodSchema.plugin(mongoosastic);
+
+var canine = mongoose.model('Canine', DogfoodSchema)
+    , stream = canine.synchronize()
+    , count = 0;
+
+canine.createMapping(function(err, mapping){
+    if(err){
+        console.log('error creating mapping (you can safely ignore this)');
+        console.log(err);
+    }else{
+        console.log('mapping created!');
+        console.log(mapping);
+    }
+});
+
+/*
+var req;
+var dogs = new canine({
+    imagepath: req.body.imagepath,
+    title: req.body.title,
+    description: req.body.description,
+    Price: req.body.Price
+});
+    dogs.on('es-indexed', function(err,res) {
+    res.redirect("/");
+});
+*/
+
 
 module.exports = canine;

@@ -4,11 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressHbs=require('express-handlebars');
-var mongoose=require('mongoose');
+var mongoose=require('mongoose'),
+    mongoosastic=require('mongoosastic');
 var session=require('express-session');
 var passport=require('passport');
 var flash=require('connect-flash');
 var mocha=require('mocha');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
