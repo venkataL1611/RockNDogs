@@ -20,11 +20,11 @@ router.get('/', function(req, res, next) {
 
 /* GET Search page. */
 
-router.post('/search', function(req, res, next) {
+router.post('/shop/search-result', function(req, res, next) {
     res.redirect('/search?q=' + req.body.q);
 });
 
-router.get('/search', function(req, res, next){
+router.get('/shop/search-result', function(req, res, next){
     if (req.query.q) {
         Canine.search({
             query_string: { query: req.query.q}
