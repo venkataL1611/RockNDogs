@@ -1,4 +1,4 @@
-var mongoose=require('mongoose');
+/*var mongoose=require('mongoose');
 var Schema =mongoose.Schema;
 var bcrypt=require('bcrypt-nodejs');
 
@@ -13,5 +13,5 @@ userSchema.methods.validPassword=function(password){
     return bcrypt.compareSync(password,this.password);
 }
 
-module.exports=mongoose.model('User',userSchema);
+module.exports=mongoose.model('User',userSchema);*/
 

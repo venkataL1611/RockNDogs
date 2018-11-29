@@ -30,3 +30,10 @@ a {
   font-weight: bolder;
 
 }
+.nav-item{
+  font-size: medium;
+  font-weight:bolder;
+}
+.form-inline{
+  alignment:center;
+}

@@ -2,25 +2,26 @@ var mongoose = require('mongoose'),
     mongoosastic=require('mongoosastic'),
     Schema = mongoose.Schema;
 var mocha=require('mocha');
-//mongoose.Promise=global.Promise;
-//(function(done){
-    mongoose.connect('mongodb://localhost:27017/dog',  { useNewUrlParser: true });
-    mongoose.connection.once('open',function(){
-        console.log('Connection has been made');
-        //done();
-    }).on('error',function(error){
-        console.log('Connection error',error);
-    });
+
+// var access = require('./access.js');
+
+mongoose.connect('mongodb://localhost:27017/dog',  { useNewUrlParser: true });
+mongoose.connection.once('open',function(){
+    console.log('Connection has been made');
+    //done();
+}).on('error',function(error){
+    console.log('Connection error',error);
+});
 
 //});
 
 // Create a Schema and a Model
 
 var DogfoodSchema = new Schema({
-    imagepath: String,
+    imagepath: { type: String, es_indexed:true },
     title: { type: String, es_indexed:true },
-    description: String,
-    Price: String
+    description: { type: String, es_indexed:true },
+    Price: { type: String, es_indexed:true }
 });
 
 DogfoodSchema.plugin(mongoosastic);
