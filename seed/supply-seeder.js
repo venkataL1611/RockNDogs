@@ -1,15 +1,8 @@
-var mocha=require('mocha');
 var assert=require('assert');
 
 var Supplies= require('../models/supply');
 var category=require('../models/category');
 
-// Describe our tests
-   /*describe('Saving products', function(){
-    this.timeout(500);
-    // Create tests
-    it('Saves a record to the database', function(done){
-        setTimeout(done, 300);*/
         var supplies = [new Supplies({
             imagepath: 'https://images-na.ssl-images-amazon.com/images/I/61GR74hciBL._SL1500_.jpg',
             Title:'Bowl',
@@ -70,41 +63,3 @@ var category=require('../models/category');
                 }
             )};
 
-
-
-
-
-
-
-/*var Products=require('../models/product');
-
- describe('Saving Records',function(){
-     this.timeout(500);
-    it('Save Record to the database',function(done){
-        setTimeout(done, 300);
-        var dogfood =[new Products(
-            {
-                imagePath: 'https://ll-us-i5.wal.co/asr/7e164e0f-c954-4c54-b0b1-4452e095095a_1.5afd7033e2652476d14f7fdb292b5a88.jpeg-ec507657aaec903c7d27c8cefe8f3d3b10690f01-optim-450x450.jpg?odnBg=FFFFFF',
-                title: 'Pedigree',
-                description: 'Is a dog food',
-                price: 14
-            }),
-            new Products(
-                {
-                    imagePath: 'https://images-na.ssl-images-amazon.com/images/I/91XGABFtSOL._SY679_.jpg',
-                    title: 'Cake mix',
-                    description: 'Is a dog food',
-                    price: 18
-                })
-        ];
-        for(var i=0;i< dogfood.length;i++){
-            dogfood[i].save().then(function() {
-                assert(!dogfood.isNew);
-                done();
-        });
-
-         };
-
-    });
-  });
-*/

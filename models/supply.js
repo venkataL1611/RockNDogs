@@ -1,8 +1,7 @@
 var mongoose = require('mongoose'),
     mongoosastic=require('mongoosastic'),
     Schema = mongoose.Schema;
-//var mocha=require('mocha');
-//mongoose.Promise=global.Promise;
+
 //(function(done){
     mongoose.connect('mongodb://localhost:27017/dog',  { useNewUrlParser: true });
     mongoose.connection.once('open',function(){
@@ -37,19 +36,6 @@ supplies.createMapping(function(err, mapping){
         console.log(mapping);
     }
 });
-
-/*
-var req;
-var dogs = new canine({
-    imagepath: req.body.imagepath,
-    title: req.body.title,
-    description: req.body.description,
-    Price: req.body.Price
-});
-    dogs.on('es-indexed', function(err,res) {
-    res.redirect("/");
-});
-*/
 
 
 module.exports = supplies;

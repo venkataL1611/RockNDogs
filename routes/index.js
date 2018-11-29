@@ -1,11 +1,7 @@
 var express = require('express');
 var router = express.Router();
-//var csrf=require('csurf');
-var passport=require('passport');
 var canine= require('../models/dogfood');
 var supplies=require('../models/supply');
-//var csrfProtection=csrf();
-//router.use(csrfProtection);
 var client = require('../ElasticSearch/connection');
 
 const {promisify} = require('util');
@@ -26,6 +22,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
+/*Get Supply Page*/
 router.get('/shop/supply', function(req, res, next) {
     supplies.find(function(err,docs){
         var productChunks=[];
@@ -37,6 +34,7 @@ router.get('/shop/supply', function(req, res, next) {
     });
 });
 
+/* Get Search Page*/
 router.get('/shop/search-result', function(req, res, next){
     // var query = req.body["search_query"];
     var query = req.query['q'];
@@ -77,7 +75,7 @@ router.get('/shop/search-result', function(req, res, next){
             res.send({error: err});
         });
         } else {
-            console.log("Hit!");
+            console.log("Hits coming from redis!");
             var data = [];
             JSON.parse(reply).forEach((o) => {
                 data.push(o._source);
@@ -171,11 +169,6 @@ router.get('/shop/supply-search', function(req, res, next){
 });
 
 
-router.get('/shop/home', function(req, res, next) {
-    res.render('shop/home');
-});
-/* GET Search page. */
-
 router.post('/search', function(req, res, next) {
     res.redirect('/search?q=' + req.body.q);
 });
@@ -198,21 +191,4 @@ router.get('/search', function(req, res, next){
     }
 });
 
-
-/* GET signup page. */
-router.get('/user/signup',function(req,res,next){
-    res.render('user/signup',{csrfToken:req.csrfToken()})
-});
-router.post('/user/signup',passport.authenticate('local.signup',{
-    successRedirect:'./profile',
-    failureRedirect:'./signup',
-    successFlash:true,
-    failureFlash:true
-}));
-/*router.post('/user/signup',
-    passport.authenticate('local.signup', { successRedirect: './profile',
-        failureRedirect: './signup' }));*/
-router.get('/user/profile',function(req,res,next) {
-    res.render('user/profile');
-});
 module.exports = router;

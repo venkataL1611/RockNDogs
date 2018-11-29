@@ -2,92 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87ff549d-b678-46a2-9532-71f21b0c4953" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/views/shop/supply-search.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ElasticSearch/docindex.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Redis/redis.js" beforeDir="false" afterPath="$PROJECT_DIR$/Redis/redis.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/passport.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/passport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/dogfood.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/dogfood.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/History.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/History.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/_http_agent.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/_http_agent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/agent.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/agent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/https_agent.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/https_agent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/lib/utils.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/agentkeepalive/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/agentkeepalive/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/.eslintignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/.node-version" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/.npmignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.compat.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.compat.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.underscore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/dist/lodash.underscore.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/lodash.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/node_modules/lodash/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/0_90.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/0_90.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/1_7.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/1_7.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/2_4.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/2_4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_0.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_1.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_1.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_2.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_3.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_3.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_4.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_5.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_5.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_6.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/5_6.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/6_0.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/6_0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/6_x.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/6_x.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/browser_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/browser_index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/master.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/apis/master.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/client_action.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/client_action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connection_pool.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connection_pool.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/angular.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/angular.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/browser_index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/browser_index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/http.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/xhr.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/connectors/xhr.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/errors.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/errors.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/host.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/host.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/log.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/log.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/logger.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/logger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/console.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/console.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/file.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/stdio.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/stdio.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/stream.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/stream.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/tracer.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/loggers/tracer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/nodes_to_host.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/nodes_to_host.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/serializers/angular.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/serializers/angular.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/serializers/json.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/serializers/json.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport/find_common_protocol.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport/find_common_protocol.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport/sniff_on_connection_fault.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/transport/sniff_on_connection_fault.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/elasticsearch/src/lib/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/webpack_config/angular.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/webpack_config/browser.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/webpack_config/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/elasticsearch/webpack_config/lib.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/passport.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/connection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/supply.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/supply.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seed/save.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/shopping-cart.iml" beforeDir="false" afterPath="$PROJECT_DIR$/shopping-cart.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/seed/category-seeder.js" beforeDir="false" afterPath="$PROJECT_DIR$/seed/category-seeder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seed/product-seeder.js" beforeDir="false" afterPath="$PROJECT_DIR$/seed/product-seeder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seed/supply-seeder.js" beforeDir="false" afterPath="$PROJECT_DIR$/seed/supply-seeder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/layouts/adminfooter.ejs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/layouts/layout.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layouts/layout.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/partials/header.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/header.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/shop/index.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/shop/index.hbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/shop/search-result.hbs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/profile.hbs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/signin.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/connection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/signup.hbs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/shop/home.hbs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/shop/supply-search" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/shop/supply-search.hbs" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -99,19 +33,61 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/partials/header.hbs">
+        <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="25" column="74" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
+            <state relative-caret-position="481">
+              <caret line="170" selection-start-line="170" selection-end-line="170" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/shop/index.hbs">
+        <entry file="file://$PROJECT_DIR$/models/category.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+            <state relative-caret-position="187">
+              <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="39" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/seed/category-seeder.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/seed/product-seeder.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/seed/supply-seeder.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/dogfood.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/error.hbs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -120,61 +96,16 @@
         <entry file="file://$PROJECT_DIR$/ElasticSearch/connection.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
-              <caret line="6" column="14" lean-forward="true" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+              <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/shop/supply-search.hbs">
+        <entry file="file://$PROJECT_DIR$/models/mongo_connect.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="69" lean-forward="true" selection-start-line="4" selection-start-column="69" selection-end-line="4" selection-end-column="69" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/supply.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="50" column="3" lean-forward="true" selection-start-line="50" selection-start-column="3" selection-end-line="50" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Redis/redis.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/dogfood.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-159">
-              <caret line="10" column="13" lean-forward="true" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ElasticSearch/esindex.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="26" lean-forward="true" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1248">
-              <caret line="60" column="45" lean-forward="true" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
+            <state>
+              <caret column="3" selection-start-column="3" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -184,8 +115,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -206,6 +137,7 @@
       <find>canine</find>
       <find>Supplies</find>
       <find>supplies</find>
+      <find>passport</find>
     </findStrings>
     <replaceStrings>
       <replace>var</replace>
@@ -223,7 +155,6 @@
         <option value="$PROJECT_DIR$/views/user/user.hbs" />
         <option value="$PROJECT_DIR$/views/user/signup.hbs" />
         <option value="$PROJECT_DIR$/views/user/profile.hbs" />
-        <option value="$PROJECT_DIR$/seed/product-seeder.js" />
         <option value="$PROJECT_DIR$/config/passport.js" />
         <option value="$PROJECT_DIR$/models/user.js" />
         <option value="$PROJECT_DIR$/views/shop/search.hbs" />
@@ -240,21 +171,24 @@
         <option value="$PROJECT_DIR$/seed/bowl-seeder.js" />
         <option value="$PROJECT_DIR$/routes/supply" />
         <option value="$PROJECT_DIR$/views/shop/supply.hbs" />
-        <option value="$PROJECT_DIR$/seed/supply-seeder.js" />
-        <option value="$PROJECT_DIR$/seed/category-seeder.js" />
         <option value="$PROJECT_DIR$/models/category.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/views/home.hbs" />
         <option value="$PROJECT_DIR$/views/shop/index.hbs" />
         <option value="$PROJECT_DIR$/views/shop/search-result.hbs" />
         <option value="$PROJECT_DIR$/models/dogfood.js" />
-        <option value="$PROJECT_DIR$/views/layouts/layout.hbs" />
-        <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/views/partials/header.hbs" />
         <option value="$PROJECT_DIR$/views/shop/supply-search" />
         <option value="$PROJECT_DIR$/ElasticSearch/esindex.js" />
         <option value="$PROJECT_DIR$/models/supply.js" />
+        <option value="$PROJECT_DIR$/Redis/redis.js" />
+        <option value="$PROJECT_DIR$/views/layouts/layout.hbs" />
+        <option value="$PROJECT_DIR$/views/partials/header.hbs" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/models/mongo_connect.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/seed/category-seeder.js" />
+        <option value="$PROJECT_DIR$/seed/product-seeder.js" />
+        <option value="$PROJECT_DIR$/seed/supply-seeder.js" />
       </list>
     </option>
   </component>
@@ -290,23 +224,7 @@
             <path>
               <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
               <item name="RockNDogs" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RockNDogs" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="stylesheets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RockNDogs" type="462c0819:PsiDirectoryNode" />
-              <item name="Redis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="RockNDogs" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="seed" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
@@ -330,15 +248,6 @@
               <item name="RockNDogs" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="shop" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="RockNDogs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="bootstrap" type="70bed36:NamedLibraryElementNode" />
             </path>
           </expand>
           <select />
@@ -387,10 +296,13 @@
     </option>
   </component>
   <component name="RunManager" selected="Node.js.index.js">
-    <configuration name="supply-search.hbs" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/RockNDogs/views/shop/supply-search.hbs">
+    <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/app.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration name="connection.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/ElasticSearch/connection.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="dogfood.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/models/dogfood.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration name="esindex.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/ElasticSearch/esindex.js" working-dir="$PROJECT_DIR$">
@@ -399,23 +311,20 @@
     <configuration name="index.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/routes">
       <method v="2" />
     </configuration>
-    <configuration name="supply.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/models/supply.js" working-dir="$PROJECT_DIR$">
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Node.js.index.js" />
-      <item itemvalue="Node.js.supply.js" />
-      <item itemvalue="JavaScript Debug.supply-search.hbs" />
       <item itemvalue="Node.js.connection.js" />
       <item itemvalue="Node.js.esindex.js" />
+      <item itemvalue="Node.js.dogfood.js" />
+      <item itemvalue="Node.js.app.js" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.index.js" />
+        <item itemvalue="Node.js.app.js" />
+        <item itemvalue="Node.js.dogfood.js" />
         <item itemvalue="Node.js.esindex.js" />
         <item itemvalue="Node.js.connection.js" />
-        <item itemvalue="JavaScript Debug.supply-search.hbs" />
-        <item itemvalue="Node.js.supply.js" />
       </list>
     </recent_temporary>
   </component>
@@ -457,7 +366,7 @@
       <workItem from="1543362595564" duration="3085000" />
       <workItem from="1543464479538" duration="2662000" />
       <workItem from="1543509396990" duration="347000" />
-      <workItem from="1543518420232" duration="10323000" />
+      <workItem from="1543518420232" duration="12227000" />
     </task>
     <servers />
   </component>
@@ -467,7 +376,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98197000" />
+    <option name="totallyTimeSpent" value="100101000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -482,7 +391,7 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49753696" visible="true" weight="0.24960254" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49753696" visible="true" weight="0.24960254" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.50246304" side_tool="true" weight="0.24960254" />
       <window_info id="Image Layers" order="3" />
@@ -499,7 +408,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32740214" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49841017" visible="true" weight="0.27175844" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49841017" weight="0.5719361" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50158983" side_tool="true" weight="0.27935943" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="12" />
@@ -597,20 +506,6 @@
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/error.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/seed/product-seeder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/express-handlebars/lib/express-handlebars.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -629,31 +524,10 @@
     <entry file="file://$PROJECT_DIR$/routes/supply" />
     <entry file="file://$PROJECT_DIR$/search.js" />
     <entry file="file://$PROJECT_DIR$/seed/save.js" />
-    <entry file="file://$PROJECT_DIR$/models/category.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/seed/supply-seeder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="61" selection-start-line="61" selection-end-line="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/shop/supply.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" column="20" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/seed/category-seeder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -664,24 +538,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/search.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
           <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/layouts/layout.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="7" column="117" selection-start-line="7" selection-start-column="117" selection-end-line="7" selection-end-column="117" />
         </state>
       </provider>
     </entry>
@@ -692,31 +552,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/shop/home.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/shop/search-result.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/shop/supply-search">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="46" column="11" selection-start-line="46" selection-start-column="11" selection-end-line="46" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -727,31 +566,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/shop/supply-search.hbs">
+    <entry file="file://$PROJECT_DIR$/ElasticSearch/docindex.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="69" lean-forward="true" selection-start-line="4" selection-start-column="69" selection-end-line="4" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ElasticSearch/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" lean-forward="true" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Redis/redis.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/partials/header.hbs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="25" column="74" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
+        <state relative-caret-position="204">
+          <caret line="12" column="2" lean-forward="true" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -762,26 +580,122 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/dogfood.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-159">
-          <caret line="10" column="13" lean-forward="true" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/ElasticSearch/info.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/models/supply.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="50" column="3" lean-forward="true" selection-start-line="50" selection-start-column="3" selection-end-line="50" selection-end-column="3" />
+        <state relative-caret-position="85">
+          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Redis/redis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/layouts/layout.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/shop/home.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/shop/supply-search.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="69" lean-forward="true" selection-start-line="4" selection-start-column="69" selection-end-line="4" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/shop/supply-search">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/partials/header.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53">
+          <caret line="25" column="74" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/error.hbs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/dogfood.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1248">
-          <caret line="60" column="45" lean-forward="true" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
+        <state relative-caret-position="481">
+          <caret line="170" selection-start-line="170" selection-end-line="170" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/category.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElasticSearch/connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/mongo_connect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="3" selection-start-column="3" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="39" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/seed/category-seeder.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/seed/product-seeder.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/seed/supply-seeder.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
