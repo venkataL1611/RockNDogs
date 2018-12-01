@@ -36,9 +36,7 @@ router.get('/shop/supply', function(req, res, next) {
 
 /* Get Search Page*/
 router.get('/shop/search-result', function(req, res, next){
-    // var query = req.body["search_query"];
     var query = req.query['q'];
-    //console.log(query, "Hi");
     return getAsync(query).then(function (reply) {
         if (reply === '{}' || reply === null) {
             let body = {
@@ -49,50 +47,31 @@ router.get('/shop/search-result', function(req, res, next){
             }
             client.search({index: 'canines', body: body, type: 'canine'})
                 .then(function (results) {
-                    console.log("No hits in Redis!");
-                    // //console.log(res);
+                    console.log("No hits in Redis! Data from elasticsearch/mongo");
                     var data = [];
-                    //console.log(res, "HI");
-                    //console.log(results.hits.hits,"xxxxxxxxxxxxxxxx");
                     results.hits.hits.forEach(function (hit) {
-                        console.log("output of results");
-                        console.log(results);
-                        console.log(hit._source);
                         data.push(hit._source);
                         console.log(data);
                     });
                     res.render('shop/search-result', {
-                        //query: req.query.q,
                         data: data
-                        //output: results.hits.hits
                     });
-                    //res.send(results.hits.hits);
                     redisClient.set(query, JSON.stringify(results.hits.hits));
-                    console.log("Set in Redis!");
+                    console.log("Data Set in Redis!");
                 })
                 .catch(err => {
                 console.log(err);
             res.send({error: err});
         });
         } else {
-            console.log("Hits coming from redis!");
             var data = [];
             JSON.parse(reply).forEach((o) => {
                 data.push(o._source);
-            console.log(data);
+                console.log(data);
+                console.log("Data Pulled from Redis!");
         });
-            console.log(data);
-            //res.send({data: reply, fromRedis: true});
-            // var data=[];
-            //     for(var i=0; var j=reply.length,i<j; i++) {
-            //         data.push(reply._source.title);
-            //     };
-            //     return data;
-            //     }
             res.render('shop/search-result', {
-                //query: req.query.q,
                 data: data
-                //output: results.hits.hits
 
             });
         }
@@ -101,94 +80,5 @@ router.get('/shop/search-result', function(req, res, next){
     });
 });
 
-router.get('/shop/supply-search', function(req, res, next){
-    // var query = req.body["search_query"];
-    var query = req.query['q'];
-    console.log(query, "Hi");
-    return getAsync(query).then(function (replysupp) {
-        if (replysupp === '{}' || replysupp === null) {
-            let body = {
-                query: {
-                    fuzzy: {"Title": query}
-
-                }
-            }
-            client.search({index: 'suppliess', body: body, type: 'supplies'})
-                .then(function (results) {
-                    console.log("No hits in Redis!");
-                    // //console.log(res);
-                    var data = [];
-                    //console.log(res, "HI");
-                    //console.log(results.hits.hits,"xxxxxxxxxxxxxxxx");
-                    results.hits.hits.forEach(function (hit) {
-                        console.log("output of results");
-                        console.log(results);
-                        console.log(hit._source);
-                        data.push(hit._source);
-                        console.log(data);
-                    });
-                    res.render('shop/supply-search', {
-                        //query: req.query.q,
-                        data: data
-                        //output: results.hits.hits
-                    });
-                    //res.send(results.hits.hits);
-                    redisClient.set(query, JSON.stringify(results.hits.hits));
-                    console.log("Set in Redis!");
-                })
-                .catch(err => {
-                console.log(err);
-            res.send({error: err});
-        });
-        } else {
-            console.log("Hit!");
-            var data = [];
-            console.log(replysupp);
-            JSON.parse(replysupp).forEach((o)=>{
-                data.push(o._source);
-            console.log(data);
-        });
-            console.log(data);
-            //res.send({data: reply, fromRedis: true});
-            // var data=[];
-            //     for(var i=0; var j=reply.length,i<j; i++) {
-            //         data.push(reply._source.title);
-            //     };
-            //     return data;
-            //     }
-            res.render('shop/supply-search', {
-                //query: req.query.q,
-                data: data
-                //output: results.hits.hits
-
-            });
-        }
-    }).catch(function(err) {
-        console.log(err);
-    });
-});
-
-
-router.post('/search', function(req, res, next) {
-    res.redirect('/search?q=' + req.body.q);
-});
-
-router.get('/search', function(req, res, next){
-    if (req.query.q) {
-        Canine.search({
-            query_string: { query: req.query.q}
-        }, function(err, results) {
-            results:
-                if (err) return next(err);
-            var data = results.hits.hits.map(function(hit) {
-                return hit;
-            });
-            res.render('shop/search-result', {
-                query: req.query.q,
-                data: data
-            });
-        });
-    }
-});
 
 module.exports = router;
