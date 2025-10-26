@@ -35,5 +35,17 @@ a {
   font-weight:bolder;
 }
 .form-inline{
-  alignment:center;
+  text-align:center;
 }
+
+/* Footer styles */
+.site-footer{
+  background:#222;
+  color:#ddd;
+  padding:30px 0;
+  margin-top:40px;
+}
+.site-footer a{ color:#f8f9fa; }
+.site-footer h5, .site-footer h6{ color:#fff; }
+.site-footer .small{ color:#999; }
+
