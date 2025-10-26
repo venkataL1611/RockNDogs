@@ -47,6 +47,7 @@ app.use(function(req, res, next) {
     res.locals.isAuthenticated = !!req.user;
     res.locals.user = req.user;
     res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
+    res.locals.year = new Date().getFullYear();
     next();
 });
 /*app.use(expressLayouts);
