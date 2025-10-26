@@ -45,19 +45,27 @@ router.get('/shop/search-result', function(req, res, next){
 
                 }
             }
-            client.search({index: 'canines', body: body, type: 'canine'})
+            client.search({index: 'dogfoods', body: body})
                 .then(function (results) {
                     console.log("No hits in Redis! Data from elasticsearch/mongo");
                     var data = [];
-                    results.hits.hits.forEach(function (hit) {
-                        data.push(hit._source);
-                        console.log(data);
-                    });
+                    if (results.hits && results.hits.hits) {
+                        results.hits.hits.forEach(function (hit) {
+                            data.push(hit._source);
+                        });
+                        redisClient.set(query, JSON.stringify(results.hits.hits));
+                        console.log("Data Set in Redis!");
+                    } else if (results.body && results.body.hits && results.body.hits.hits) {
+                        results.body.hits.hits.forEach(function (hit) {
+                            data.push(hit._source);
+                        });
+                        redisClient.set(query, JSON.stringify(results.body.hits.hits));
+                        console.log("Data Set in Redis!");
+                    }
+                    console.log("Found", data.length, "results");
                     res.render('shop/search-result', {
                         data: data
                     });
-                    redisClient.set(query, JSON.stringify(results.hits.hits));
-                    console.log("Data Set in Redis!");
                 })
                 .catch(err => {
                 console.log(err);

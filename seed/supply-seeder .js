@@ -1,96 +1,81 @@
 var mocha=require('mocha');
 var assert=require('assert');
+var mongoose=require('mongoose');
 
-//var Supplies= require('../models/supply');
-var canine= require('../models/dogfood');
-//var category=require('../models/category');
+var Supplies= require('../models/supply');
 
-// Describe our tests
-   /*describe('Saving products', function(){
-    this.timeout(500);
-    // Create tests
-    it('Saves a record to the database', function(done){
-        setTimeout(done, 300);*/
-        var supplies = [new canine({
+var supplies = [new Supplies({
             imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Bowl.jpg",
-            description : "Stainless Steel dog bowl with rubber-base skid resistance",
-            title : "Bowl",
-            price : "13"
+            Title : "Bowl",
+            Price : "13"
         }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538612/Images/41kGZSkgfcL._SL500_AC_SS350_.jpg",
-                description : "Engineered for large dogs",
-                title : "Dog Bed",
-                price : "$25"
+                Title : "Dog Bed",
+                Price : "25"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538452/Images/Dog_Bowl.jpg",
-                description : "Super Design melamine bowl",
-                title : "Dog Bowl",
-                price : "$14"
+                Title : "Dog Bowl",
+                Price : "14"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Harness.jpg",
-                description : "Leash set for small puppies",
-                title : "Dog Harness",
-                price : "$21"
+                Title : "Dog Harness",
+                Price : "21"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538660/Images/Round_Bowl.jpg",
-                description : "Bone dry ceramic round pet bowl",
-                title : "Round Bowl",
-                price : "$31"
+                Title : "Round Bowl",
+                Price : "31"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Large_Harness.jpg",
-                description : "No-Pull Outdoor Pet Vest",
-                title : "Large Harness",
-                price : "$19"
+                Title : "Large Harness",
+                Price : "19"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Net_Harness.jpg",
-                description : "Adjustable dog vest with net surface reflective material straps",
-                title : "Net Harness",
-                price : "$24"
+                Title : "Net Harness",
+                Price : "24"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Frisbee.jpg",
-                description : "Flying disc, flying saucer assortment",
-                title : "Dog Frisbee",
-                price : "$34"
+                Title : "Dog Frisbee",
+                Price : "34"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Harness.jpg",
-                description : "Reflective No Pull Harness with Handle and Two Leash Attachments",
-                title : "Harness",
-                price : "$26"
+                Title : "Harness",
+                Price : "26"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Toy.jpg",
-                description : "Rattle and chew-toy",
-                title : "Dog Toy",
-                price : "$9"
+                Title : "Dog Toy",
+                Price : "9"
             }),
-            new canine({
+            new Supplies({
                 imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Nerf_Dog.jpg",
-                description : "20inch Tennis Ball Blaster",
-                title : "Nerf Dog"
-            })
-        ];
-        //
-        // var categories= [new category({
-        //     title:'Dogfood Brands',
-        //
-        // })
-        // ];
-        for(var k=0;k<supplies.length;k++)
-        {
-            supplies[k].save().then(function() {
-                    assert(!supplies.isNew);
-                    //done();
-                }
-            )};
-
+                Title : "Nerf Dog",
+            Price : "20"
+        })
+    ];
+    
+    var done = 0;
+    for(var k=0;k<supplies.length;k++)
+    {
+        supplies[k].save().then(function() {
+            assert(!supplies.isNew);
+            done++;
+            if(done === supplies.length) {
+                console.log('Dog supplies seeded successfully!');
+                mongoose.disconnect();
+            }
+        }).catch(function(err) {
+            console.error('Error seeding supplies:', err);
+            mongoose.disconnect();
+        });
+    }
 
 
 

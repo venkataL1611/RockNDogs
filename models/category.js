@@ -1,17 +1,24 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
+
+
 
 // Category Schema
-var CategorySchema = mongoose.Schema({
+var CategorySchema = new mongoose.Schema({
    
     title: {
         type: String,
-        required: true
+        es_type: 'text'
     },
     slug: {
-        type: String
+        type: String,
+        es_type: 'text'
     }
     
 });
+
+CategorySchema.plugin(mongoosastic);
+
 mongoose.connect('mongodb://localhost:27017/dog',  { useNewUrlParser: true });
 mongoose.connection.once('open',function(){
     console.log('Connection has been made');

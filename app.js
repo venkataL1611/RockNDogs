@@ -6,7 +6,9 @@ var logger = require('morgan');
 var expressHbs=require('express-handlebars');
 var mongoose=require('mongoose'),
     mongoosastic=require('mongoosastic');
-//var session=require('express-session');
+var session=require('express-session');
+var passport = require('passport');
+require('./config/passport');
 var expressLayouts = require('express-ejs-layouts');
 var ejs = require('ejs');
 var engine = require('ejs-mate');
@@ -29,12 +31,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// Sessions (dev-only MemoryStore; replace with connect-mongo in production)
+app.use(session({
+    secret: 'rockndogs-secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Expose auth/cart info to templates
+app.use(function(req, res, next) {
+    res.locals.isAuthenticated = !!req.user;
+    res.locals.user = req.user;
+    res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
+    next();
+});
 /*app.use(expressLayouts);
 app.use(ejs);
 app.use(engine);*/
 
 
 app.use('/', indexRouter);
+app.use('/', require('./routes/auth'));
+app.use('/', require('./routes/cart'));
 
 
 app.use(function(req, res, next) {

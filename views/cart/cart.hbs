@@ -1,0 +1,37 @@
+<div class="cart">
+  <h1>Your Cart</h1>
+  {{#if totalQty}}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each products}}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="{{this.item.imagepath}}" alt="" style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
+              <div>
+                <strong>{{this.item.title}}</strong>
+                <div class="text-muted">{{this.item.description}}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{this.qty}}</td>
+          <td>${{this.price}}</td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+    <div class="text-right">
+      <h4>Total: ${{totalPrice}}</h4>
+      <a href="#" class="btn btn-success" disabled>Checkout (placeholder)</a>
+    </div>
+  {{else}}
+    <p>Your cart is empty.</p>
+  {{/if}}
+</div>
