@@ -3,23 +3,52 @@ var router = express.Router();
 var passport = require('passport');
 
 function ensureGuest(req, res, next){
-  if(req.isAuthenticated()) return res.redirect('/');
+  if(req.isAuthenticated()) {
+    console.log('User already authenticated, redirecting to home');
+    return res.redirect('/');
+  }
   next();
 }
 
 function ensureAuth(req, res, next){
   if(req.isAuthenticated()) return next();
+  req.session.returnTo = req.originalUrl;
+  req.session.loginMessage = 'Please login to continue';
   res.redirect('/login');
 }
 
 router.get('/login', ensureGuest, function(req, res){
-  res.render('auth/login', { title: 'Login' });
+  const message = req.session.loginMessage;
+  delete req.session.loginMessage;
+  res.render('auth/login', { title: 'Login', message: message });
 });
 
-router.post('/login', ensureGuest, passport.authenticate('local-login', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}));
+router.post('/login', ensureGuest, function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) return next(err);
+    if (!user) {
+      console.log('Login failed - no user');
+      return res.redirect('/login');
+    }
+    
+    req.logIn(user, function(err) {
+      if (err) {
+        console.log('logIn error:', err);
+        return next(err);
+      }
+      
+      console.log('User logged in successfully:', user.email);
+      console.log('Session ID:', req.sessionID);
+      console.log('isAuthenticated:', req.isAuthenticated());
+      
+      // Redirect to returnTo URL if it exists, otherwise go to home
+      const returnTo = req.session.returnTo || '/';
+      delete req.session.returnTo;
+      console.log('Redirecting to:', returnTo);
+      return res.redirect(returnTo);
+    });
+  })(req, res, next);
+});
 
 router.get('/signup', ensureGuest, function(req, res){
   res.render('auth/signup', { title: 'Sign up' });

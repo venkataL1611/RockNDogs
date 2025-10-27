@@ -30,6 +30,10 @@ app.engine('.hbs',expressHbs({
     eq: function(a, b) {
       return a === b;
     }
+  },
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
   }
 }));
 app.set('view engine', '.hbs');
@@ -52,10 +56,23 @@ app.use(passport.session());
 
 // Expose auth/cart info to templates
 app.use(function(req, res, next) {
+    // Prevent caching of authenticated pages
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
     res.locals.isAuthenticated = !!req.user;
     res.locals.user = req.user;
     res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
     res.locals.year = new Date().getFullYear();
+    
+    // Debug logging
+    if (req.path.includes('/shop/') || req.path.includes('/product/')) {
+        console.log('Request path:', req.path);
+        console.log('isAuthenticated:', res.locals.isAuthenticated);
+        console.log('User:', req.user ? req.user.email : 'none');
+    }
+    
     next();
 });
 /*app.use(expressLayouts);

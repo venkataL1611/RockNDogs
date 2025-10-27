@@ -5,7 +5,14 @@ var DogFood = require('../models/dogfood');
 var Supply = require('../models/supply');
 var Order = require('../models/order');
 
-router.get('/cart', function(req, res) {
+// Middleware to ensure user is authenticated
+function ensureAuth(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  req.session.returnTo = req.originalUrl; // Save the original URL to redirect back after login
+  res.redirect('/login');
+}
+
+router.get('/cart', ensureAuth, function(req, res) {
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   const totalPrice = cart.totalPrice;
   const taxAmount = (totalPrice * 0.08).toFixed(2);
@@ -21,7 +28,7 @@ router.get('/cart', function(req, res) {
   });
 });
 
-router.get('/cart/add/:type/:id', async function(req, res) {
+router.get('/cart/add/:type/:id', ensureAuth, async function(req, res) {
   var productId = req.params.id;
   var type = req.params.type;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -54,7 +61,7 @@ router.get('/cart/add/:type/:id', async function(req, res) {
 });
 
 // Remove item from cart
-router.get('/cart/remove/:id', function(req, res) {
+router.get('/cart/remove/:id', ensureAuth, function(req, res) {
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   
@@ -69,7 +76,7 @@ router.get('/cart/remove/:id', function(req, res) {
 });
 
 // Increase quantity
-router.get('/cart/increase/:id', function(req, res) {
+router.get('/cart/increase/:id', ensureAuth, function(req, res) {
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   
@@ -85,7 +92,7 @@ router.get('/cart/increase/:id', function(req, res) {
 });
 
 // Decrease quantity
-router.get('/cart/decrease/:id', function(req, res) {
+router.get('/cart/decrease/:id', ensureAuth, function(req, res) {
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   
@@ -101,7 +108,7 @@ router.get('/cart/decrease/:id', function(req, res) {
 });
 
 // Checkout page
-router.get('/checkout', function(req, res) {
+router.get('/checkout', ensureAuth, function(req, res) {
   if (!req.session.cart || !req.session.cart.totalQty) {
     return res.redirect('/cart');
   }
@@ -122,7 +129,7 @@ router.get('/checkout', function(req, res) {
 });
 
 // Process checkout - Dummy payment gateway
-router.post('/checkout/process', async function(req, res) {
+router.post('/checkout/process', ensureAuth, async function(req, res) {
   console.log('[TRACE] Checkout process started');
   const startTime = Date.now();
   

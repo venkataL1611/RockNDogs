@@ -31,9 +31,16 @@
 
       <!-- Add to Cart -->
       <div class="mb-4">
-        <a href="/cart/add/{{product._type}}/{{product._id}}" class="btn btn-success btn-lg btn-block">
-          <i class="fas fa-shopping-cart"></i> Add to Cart
-        </a>
+        {{#if isAuthenticated}}
+          <a href="/cart/add/{{product._type}}/{{product._id}}" class="btn btn-success btn-lg btn-block">
+            <i class="fas fa-shopping-cart"></i> Add to Cart
+          </a>
+        {{else}}
+          <a href="/login" class="btn btn-secondary btn-lg btn-block">
+            <i class="fas fa-lock"></i> Login to Add to Cart
+          </a>
+          <small class="text-muted d-block text-center mt-2">You need to login to purchase products</small>
+        {{/if}}
       </div>
 
       <!-- Product Features -->

@@ -47,6 +47,8 @@ router.get('/browse', async function(req, res, next) {
 /* GET Dog Food Brands Page */
 router.get('/shop/dogfoods', function(req, res, next) {
     console.log('Dog foods route hit');
+    console.log('isAuthenticated in route:', req.isAuthenticated());
+    console.log('res.locals.isAuthenticated:', res.locals.isAuthenticated);
     canine.find(function(err,docs){
         if(err) {
             console.error('Error fetching dogfoods:', err);
@@ -58,6 +60,7 @@ router.get('/shop/dogfoods', function(req, res, next) {
             productChunks.push(docs.slice(i,i+chunkSize));
         }
         console.log('Rendering dogfoods, chunks:', productChunks.length);
+        console.log('About to render with isAuthenticated:', res.locals.isAuthenticated);
         res.render('shop/index', { title: 'Dog Food Brands', diets: productChunks });
     });
 });

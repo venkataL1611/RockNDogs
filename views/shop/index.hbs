@@ -20,7 +20,11 @@
                         </div>
                         <div class="clearfix">
                             <a href="/product/dogfood/{{this._id}}" class="btn btn-info btn-sm pull-left" role="button"><i class="fas fa-eye"></i> View</a>
-                            <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary btn-sm pull-right" role="button"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                            {{#if @root.isAuthenticated}}
+                                <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary btn-sm pull-right" role="button"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                            {{else}}
+                                <a href="/login" class="btn btn-secondary btn-sm pull-right" role="button" title="Login to add to cart"><i class="fas fa-lock"></i> Login to Buy</a>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
