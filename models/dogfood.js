@@ -41,4 +41,4 @@ mongoose.connection.once('open', function () {
   console.log('Connection error', error);
 });
 
-const DogFood = module.exports = mongoose.model('DogFood', DogFoodSchema);
+module.exports = mongoose.model('DogFood', DogFoodSchema);

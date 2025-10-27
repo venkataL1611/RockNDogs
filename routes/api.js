@@ -1,9 +1,20 @@
 const express = require('express');
 
 const router = express.Router();
-const mongoose = require('mongoose');
 const client = require('../ElasticSearch/connection');
 const Review = require('../models/review');
+
+// Helper to safely extract hits from Elasticsearch responses
+function getHits(result) {
+  if (!result) return [];
+  if (result.body && result.body.hits && Array.isArray(result.body.hits.hits)) {
+    return result.body.hits.hits;
+  }
+  if (result.hits && Array.isArray(result.hits.hits)) {
+    return result.hits.hits;
+  }
+  return [];
+}
 
 // JSON search endpoint: supports fuzzy and prefix searching
 router.get('/search', async function (req, res) {
@@ -46,9 +57,7 @@ router.get('/search', async function (req, res) {
     ]);
 
     // Normalize dogfood results
-    const dogfoodHits = (dogfoodResult.body && dogfoodResult.body.hits && dogfoodResult.body.hits.hits)
-      ? dogfoodResult.body.hits.hits
-      : (dogfoodResult.hits && dogfoodResult.hits.hits ? dogfoodResult.hits.hits : []);
+    const dogfoodHits = getHits(dogfoodResult);
 
     const dogfoodData = dogfoodHits.map((h) => {
       const src = { ...h._source || {} };
@@ -58,9 +67,7 @@ router.get('/search', async function (req, res) {
     });
 
     // Normalize supply results
-    const supplyHits = (supplyResult.body && supplyResult.body.hits && supplyResult.body.hits.hits)
-      ? supplyResult.body.hits.hits
-      : (supplyResult.hits && supplyResult.hits.hits ? supplyResult.hits.hits : []);
+    const supplyHits = getHits(supplyResult);
 
     const supplyData = supplyHits.map((h) => {
       const src = { ...h._source || {} };
@@ -97,7 +104,9 @@ router.get('/reviews/:type/:id', async function (req, res) {
     const distribution = {
       5: 0, 4: 0, 3: 0, 2: 0, 1: 0
     };
-    reviews.forEach((r) => distribution[r.rating]++);
+    reviews.forEach((r) => {
+      distribution[r.rating] += 1;
+    });
 
     res.json({
       reviews,
@@ -133,7 +142,7 @@ router.post('/review', async function (req, res) {
       userName: req.user ? req.user.email : 'Anonymous',
       userEmail: req.user ? req.user.email : null,
       userId: req.user ? req.user._id : null,
-      rating: parseInt(rating),
+      rating: parseInt(rating, 10),
       reviewTitle,
       reviewText,
       verified: !!req.user, // Verified if logged in

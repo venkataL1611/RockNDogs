@@ -5,13 +5,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const expressHbs = require('express-handlebars');
 const mongoose = require('mongoose');
-const mongoosastic = require('mongoosastic');
 const session = require('express-session');
 const passport = require('passport');
+
 require('./config/passport');
-const expressLayouts = require('express-ejs-layouts');
-const ejs = require('ejs');
-const engine = require('ejs-mate');
 
 // Security packages
 const helmet = require('helmet');
@@ -45,11 +42,23 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://stackpath.bootstrapcdn.com', 'https://cdnjs.cloudflare.com', 'https://use.fontawesome.com'],
-      scriptSrc: ["'self'", "'unsafe-inline'", 'https://code.jquery.com', 'https://cdnjs.cloudflare.com', 'https://stackpath.bootstrapcdn.com'],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'https://stackpath.bootstrapcdn.com',
+        'https://cdnjs.cloudflare.com',
+        'https://use.fontawesome.com'
+      ],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'https://code.jquery.com',
+        'https://cdnjs.cloudflare.com',
+        'https://stackpath.bootstrapcdn.com'
+      ],
       fontSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://use.fontawesome.com', 'data:'],
       imgSrc: ["'self'", 'data:', 'https:'],
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null // Upgrade HTTP to HTTPS in production
+      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null
     }
   },
   hsts: {

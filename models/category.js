@@ -25,4 +25,4 @@ mongoose.connection.once('open', function () {
   console.log('Connection error', error);
 });
 
-const Category = module.exports = mongoose.model('Category', CategorySchema);
+module.exports = mongoose.model('Category', CategorySchema);

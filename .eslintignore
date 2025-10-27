@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+coverage/
+
+# Build output
+dist/
+build/
+
+# Public JavaScript (browser code)
+public/javascripts/
+
+# Seed scripts (one-time setup)
+seed/
+scripts/
+
+# Test files
+tests/
+
+# Config files
+*.config.js
+jest.config.js
+.eslintrc.js

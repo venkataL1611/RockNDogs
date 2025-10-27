@@ -6,24 +6,23 @@ const redis = require('redis');
 const canine = require('../models/dogfood');
 const supplies = require('../models/supply');
 const client = require('../ElasticSearch/connection');
-const Category = require('../models/category');
 
 const redisClient = redis.createClient();
 
 const getAsync = promisify(redisClient.get).bind(redisClient);
 
 /* GET home page - redirect to /home */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
   res.redirect('/home');
 });
 
 /* GET /home - show landing page */
-router.get('/home', function (req, res, next) {
+router.get('/home', function (req, res) {
   res.render('shop/home', { title: 'Welcome to Rock N Dogs' });
 });
 
 /* GET /browse - show all products (dogfoods + supplies) */
-router.get('/browse', async function (req, res, next) {
+router.get('/browse', async function (req, res) {
   console.log('Browse route hit');
   try {
     const dogfoods = await canine.find().lean().exec();
@@ -46,11 +45,11 @@ router.get('/browse', async function (req, res, next) {
 });
 
 /* GET Dog Food Brands Page */
-router.get('/shop/dogfoods', function (req, res, next) {
+router.get('/shop/dogfoods', function (req, res) {
   console.log('Dog foods route hit');
   console.log('isAuthenticated in route:', req.isAuthenticated());
   console.log('res.locals.isAuthenticated:', res.locals.isAuthenticated);
-  canine.find(function (err, docs) {
+  canine.find().exec(function (err, docs) {
     if (err) {
       console.error('Error fetching dogfoods:', err);
       return res.render('shop/index', { title: 'Dog Food Brands', diets: [] });
@@ -67,7 +66,7 @@ router.get('/shop/dogfoods', function (req, res, next) {
 });
 
 /* GET product detail page */
-router.get('/product/:type/:id', async function (req, res, next) {
+router.get('/product/:type/:id', async function (req, res) {
   const { type, id } = req.params;
   console.log('Product detail route hit:', type, id);
 
@@ -115,8 +114,8 @@ router.get('/product/:type/:id', async function (req, res, next) {
 });
 
 /* Get Supply Page */
-router.get('/shop/supply', function (req, res, next) {
-  supplies.find(function (err, docs) {
+router.get('/shop/supply', function (req, res) {
+  supplies.find().exec(function (err, docs) {
     const productChunks = [];
     const chunkSize = 3;
     for (let i = 0; i < docs.length; i += chunkSize) {
@@ -127,7 +126,7 @@ router.get('/shop/supply', function (req, res, next) {
 });
 
 /* Get Search Page */
-router.get('/shop/search-result', function (req, res, next) {
+router.get('/shop/search-result', function (req, res) {
   const query = req.query.q;
   return getAsync(query).then(function (reply) {
     if (reply === '{}' || reply === null) {

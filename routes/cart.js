@@ -6,7 +6,38 @@ const DogFood = require('../models/dogfood');
 const Supply = require('../models/supply');
 const Order = require('../models/order');
 
-// Middleware to ensure user is authenticated
+// Simulate payment gateway (for learning distributed tracing)
+async function simulatePaymentGateway(paymentMethod, amount) {
+  console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
+
+  // Simulate network delay
+  await new Promise((resolve) => {
+    setTimeout(resolve, 500 + Math.random() * 1000);
+  });
+
+  // Generate random number for testing
+  const random = Math.random();
+  console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
+
+  // Simulate random failures (5% chance - reduced for better testing)
+  if (random < 0.05) {
+    console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
+    return {
+      status: 'failed',
+      message: 'Payment was declined. Please check your payment details and try again.'
+    };
+  }
+
+  // Generate transaction ID
+  const transactionId = `TXN${Date.now()}${Math.floor(Math.random() * 10000)}`;
+
+  console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
+  return {
+    status: 'success',
+    transactionId,
+    amount
+  };
+}
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) return next();
   req.session.returnTo = req.originalUrl; // Save the original URL to redirect back after login
@@ -82,9 +113,9 @@ router.get('/cart/increase/:id', ensureAuth, function (req, res) {
   const cart = new Cart(req.session.cart ? req.session.cart : {});
 
   if (cart.items && cart.items[productId]) {
-    cart.items[productId].qty++;
+    cart.items[productId].qty += 1;
     cart.items[productId].price += cart.items[productId].item.Price;
-    cart.totalQty++;
+    cart.totalQty += 1;
     cart.totalPrice += cart.items[productId].item.Price;
     req.session.cart = cart;
   }
@@ -98,9 +129,9 @@ router.get('/cart/decrease/:id', ensureAuth, function (req, res) {
   const cart = new Cart(req.session.cart ? req.session.cart : {});
 
   if (cart.items && cart.items[productId] && cart.items[productId].qty > 1) {
-    cart.items[productId].qty--;
+    cart.items[productId].qty -= 1;
     cart.items[productId].price -= cart.items[productId].item.Price;
-    cart.totalQty--;
+    cart.totalQty -= 1;
     cart.totalPrice -= cart.items[productId].item.Price;
     req.session.cart = cart;
   }
@@ -215,36 +246,7 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
   }
 });
 
-// Simulate payment gateway (for learning distributed tracing)
-async function simulatePaymentGateway(paymentMethod, amount) {
-  console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
-
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500 + Math.random() * 1000));
-
-  // Generate random number for testing
-  const random = Math.random();
-  console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
-
-  // Simulate random failures (5% chance - reduced for better testing)
-  if (random < 0.05) {
-    console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
-    return {
-      status: 'failed',
-      message: 'Payment was declined. Please check your payment details and try again.'
-    };
-  }
-
-  // Generate transaction ID
-  const transactionId = `TXN${Date.now()}${Math.floor(Math.random() * 10000)}`;
-
-  console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
-  return {
-    status: 'success',
-    transactionId,
-    amount
-  };
-}
+// moved simulatePaymentGateway above
 
 // Order confirmation page
 router.get('/order/confirmation/:orderNumber', async function (req, res) {

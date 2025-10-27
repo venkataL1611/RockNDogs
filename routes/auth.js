@@ -20,14 +20,7 @@ function ensureGuest(req, res, next) {
     console.log('User already authenticated, redirecting to home');
     return res.redirect('/');
   }
-  next();
-}
-
-function ensureAuth(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  req.session.returnTo = req.originalUrl;
-  req.session.loginMessage = 'Please login to continue';
-  res.redirect('/login');
+  return next();
 }
 
 router.get('/login', ensureGuest, function (req, res) {
@@ -57,8 +50,8 @@ router.post(
       });
     }
 
-    passport.authenticate('local-login', function (err, user, info) {
-      if (err) return next(err);
+    passport.authenticate('local-login', function (authErr, user, info) {
+      if (authErr) return next(authErr);
       if (!user) {
         console.log('Login failed - no user');
         return res.render('auth/login', {
@@ -67,10 +60,10 @@ router.post(
         });
       }
 
-      req.logIn(user, function (err) {
-        if (err) {
-          console.log('logIn error:', err);
-          return next(err);
+      req.logIn(user, function (loginErr) {
+        if (loginErr) {
+          console.log('logIn error:', loginErr);
+          return next(loginErr);
         }
 
         console.log('User logged in successfully:', user.email);
@@ -105,11 +98,8 @@ router.post(
 );
 
 // GET logout - simplified version
-router.get('/logout', function (req, res, next) {
+router.get('/logout', function (req, res) {
   console.log('Logout route hit, user:', req.user ? req.user.email : 'none');
-
-  // Store session ID before destroying
-  const { sessionID } = req;
 
   // Simple logout without callback (older passport versions)
   try {

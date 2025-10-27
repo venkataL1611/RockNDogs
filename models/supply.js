@@ -24,8 +24,6 @@ const SuppliesSchema = new Schema({
 SuppliesSchema.plugin(mongoosastic);
 
 const supplies = mongoose.model('Supplies', SuppliesSchema);
-const stream = supplies.synchronize();
-const count = 0;
 
 supplies.createMapping(function (err, mapping) {
   if (err) {
