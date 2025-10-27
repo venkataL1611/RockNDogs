@@ -142,13 +142,19 @@ router.get('/shop/search-result', function (req, res) {
           const data = [];
           if (results.hits && results.hits.hits) {
             results.hits.hits.forEach(function (hit) {
-              data.push(hit._source);
+              const item = { ...hit._source };
+              item._id = hit._id;
+              item._type = 'dogfood';
+              data.push(item);
             });
             redisClient.set(query, JSON.stringify(results.hits.hits));
             console.log('Data Set in Redis!');
           } else if (results.body && results.body.hits && results.body.hits.hits) {
             results.body.hits.hits.forEach(function (hit) {
-              data.push(hit._source);
+              const item = { ...hit._source };
+              item._id = hit._id;
+              item._type = 'dogfood';
+              data.push(item);
             });
             redisClient.set(query, JSON.stringify(results.body.hits.hits));
             console.log('Data Set in Redis!');
@@ -165,8 +171,10 @@ router.get('/shop/search-result', function (req, res) {
     } else {
       const data = [];
       JSON.parse(reply).forEach((o) => {
-        data.push(o._source);
-        console.log(data);
+        const item = { ...o._source };
+        item._id = o._id;
+        item._type = 'dogfood';
+        data.push(item);
         console.log('Data Pulled from Redis!');
       });
       res.render('shop/search-result', {

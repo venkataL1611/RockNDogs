@@ -4,13 +4,20 @@
             {{# each data}}
                 <div class="col-sm-6 col-md-4" style="padding: 25px">
                     <div class="img-thumbnail">
-                        <img src="{{imagepath}}" alt="..." class="img-responsive">
-                        <h3>{{title}}</h3>
+                        <a href="/product/{{_type}}/{{_id}}">
+                            <img src="{{imagepath}}" alt="{{title}}" class="img-responsive">
+                        </a>
+                        <a href="/product/{{_type}}/{{_id}}">
+                            <h3>{{title}}</h3>
+                        </a>
                         <p class="Description">{{description}}</p>
                         <div class="clearfix">
                             <div class="price pull-left">Price:${{Price}}</div>
-                            <a href="#" class="btn btn-primary pull-right" role="button"><i class="fas fa-shopping-cart"></i>Add to cart</a>
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="#" class="btn btn-primary pull-right" role="button">Buy Now</a>
+                            {{#if @root.isAuthenticated}}
+                                <a href="/cart/add/{{_type}}/{{_id}}" class="btn btn-primary pull-right" role="button"><i class="fas fa-shopping-cart"></i>Add to cart</a>
+                            {{else}}
+                                <a href="/login" class="btn btn-primary pull-right" role="button"><i class="fas fa-shopping-cart"></i>Add to cart</a>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
