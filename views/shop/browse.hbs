@@ -1,0 +1,40 @@
+<div class="container">
+  <h1 class="my-4">Browse All Products</h1>
+  
+  <div class="row">
+    {{#each products}}
+      <div class="col-sm-6 col-md-4" style="padding: 25px">
+        <div class="img-thumbnail">
+          <img src="{{this.imagepath}}" alt="{{this.title}}{{this.Title}}" class="img-responsive">
+          <h3>{{this.title}}{{#unless this.title}}{{this.Title}}{{/unless}}</h3>
+          <p class="Description">
+            {{#if this.description}}
+              {{this.description}}
+            {{else}}
+              {{this.Title}}
+            {{/if}}
+          </p>
+          <div class="clearfix">
+            <div class="price pull-left">Price: ${{this.Price}}</div>
+            {{#if (eq this._type 'dogfood')}}
+              <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary pull-right" role="button">
+                <i class="fas fa-shopping-cart"></i> Add to cart
+              </a>
+            {{else}}
+              <a href="/cart/add/supply/{{this._id}}" class="btn btn-primary pull-right" role="button">
+                <i class="fas fa-shopping-cart"></i> Add to cart
+              </a>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    {{else}}
+      <div class="col-12">
+        <div class="alert alert-warning text-center">
+          <h4>No products available</h4>
+          <p>Please check back later.</p>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>

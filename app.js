@@ -23,7 +23,15 @@ mongoose.connect('mongodb://localhost:27017/shopping');
 
 
 // view engine setup
-app.engine('.hbs',expressHbs({defaultLayout:'layout',extname:'.hbs'}));
+app.engine('.hbs',expressHbs({
+  defaultLayout:'layout',
+  extname:'.hbs',
+  helpers: {
+    eq: function(a, b) {
+      return a === b;
+    }
+  }
+}));
 app.set('view engine', '.hbs');
 
 app.use(logger('dev'));
@@ -58,6 +66,8 @@ app.use(engine);*/
 app.use('/', indexRouter);
 app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/cart'));
+// API routes (live search)
+app.use('/', require('./routes/api'));
 
 
 app.use(function(req, res, next) {

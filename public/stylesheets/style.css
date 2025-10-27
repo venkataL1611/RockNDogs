@@ -49,3 +49,67 @@ a {
 .site-footer h5, .site-footer h6{ color:#fff; }
 .site-footer .small{ color:#999; }
 
+/* Live search styles */
+.live-search-box{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2000;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: -1px;
+}
+.live-search-box .ls-item{ 
+  display: flex; 
+  align-items: center; 
+  padding: 12px; 
+  border-bottom: 1px solid #f1f1f1; 
+  text-decoration: none; 
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.live-search-box .ls-item:hover, 
+.live-search-box .ls-item.selected{ 
+  background: #f6f9ff; 
+}
+.live-search-box .ls-thumb{ 
+  width: 50px; 
+  height: 50px; 
+  object-fit: cover; 
+  margin-right: 12px;
+  border-radius: 4px;
+}
+.live-search-box .ls-meta{ 
+  flex: 1; 
+  min-width: 0;
+}
+.live-search-box .ls-title{ 
+  font-weight: 600; 
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.live-search-box .ls-desc{ 
+  font-size: 12px; 
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-search-box .ls-price{ 
+  margin-left: 12px; 
+  font-weight: 700; 
+  color: #28a745;
+  font-size: 15px;
+}
+.live-search-box .empty{ 
+  padding: 16px; 
+  color: #999;
+  text-align: center;
+  font-style: italic;
+}

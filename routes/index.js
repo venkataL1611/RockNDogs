@@ -3,6 +3,7 @@ var router = express.Router();
 var canine= require('../models/dogfood');
 var supplies=require('../models/supply');
 var client = require('../ElasticSearch/connection');
+var Category = require('../models/category');
 
 const {promisify} = require('util');
 var redis = require("redis"),
@@ -10,15 +11,54 @@ var redis = require("redis"),
 const getAsync = promisify(redisClient.get).bind(redisClient);
 
 
-/* GET home page. */
+/* GET home page - redirect to /home */
 router.get('/', function(req, res, next) {
+    res.redirect('/home');
+});
+
+/* GET /home - show landing page */
+router.get('/home', function(req, res, next) {
+    res.render('shop/home', { title: 'Welcome to Rock N Dogs' });
+});
+
+/* GET /browse - show all products (dogfoods + supplies) */
+router.get('/browse', async function(req, res, next) {
+    console.log('Browse route hit');
+    try {
+        const dogfoods = await canine.find().lean().exec();
+        const suppliesList = await supplies.find().lean().exec();
+        
+        console.log('Found dogfoods:', dogfoods.length);
+        console.log('Found supplies:', suppliesList.length);
+
+        // normalize items with a type so Add-to-cart links can target the right route
+        const products = [];
+        dogfoods.forEach(d => products.push(Object.assign({}, d, { _type: 'dogfood' })));
+        suppliesList.forEach(s => products.push(Object.assign({}, s, { _type: 'supply' })));
+
+        // render a browse view which lists all products
+        res.render('shop/browse', { title: 'Browse All Products', products: products });
+    } catch(err) {
+        console.error('Browse error', err);
+        res.status(500).render('shop/browse', { title: 'Browse Products', products: [] });
+    }
+});
+
+/* GET Dog Food Brands Page */
+router.get('/shop/dogfoods', function(req, res, next) {
+    console.log('Dog foods route hit');
     canine.find(function(err,docs){
+        if(err) {
+            console.error('Error fetching dogfoods:', err);
+            return res.render('shop/index', { title: 'Dog Food Brands', diets: [] });
+        }
         var productChunks=[];
         var chunkSize=3;
         for(var i=0;i<docs.length;i += chunkSize){
             productChunks.push(docs.slice(i,i+chunkSize));
         }
-        res.render('shop/index', { title: 'Express',diets:productChunks});
+        console.log('Rendering dogfoods, chunks:', productChunks.length);
+        res.render('shop/index', { title: 'Dog Food Brands', diets: productChunks });
     });
 });
 
