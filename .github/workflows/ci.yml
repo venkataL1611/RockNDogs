@@ -79,11 +79,17 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    - name: Seed Test Data
+      run: node tests/seed-test-data.js
+      env:
+        NODE_ENV: test
+        MONGODB_URI: mongodb://localhost:27017/shopping
+    
     - name: Run Unit Tests
       run: npm run test:unit
       env:
         NODE_ENV: test
-        MONGODB_URI: mongodb://localhost:27017/shopping_test
+        MONGODB_URI: mongodb://localhost:27017/shopping
     
     - name: Start Application
       run: npm start &
