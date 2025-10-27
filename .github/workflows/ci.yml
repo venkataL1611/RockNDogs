@@ -2,9 +2,12 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches:
+      - '**'      # run on pushes to any branch
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - '**'      # run on PRs targeting any branch
+  workflow_dispatch: {}  # allow manual runs from the Actions tab
 
 jobs:
   lint:
