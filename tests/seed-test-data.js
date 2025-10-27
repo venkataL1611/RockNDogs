@@ -7,14 +7,16 @@
 
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping';
+// IMPORTANT: Use TEST database, not production!
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping_test';
 
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('✅ Connected to MongoDB for seeding');
+  console.log('✅ Connected to TEST database for seeding');
+  console.log(`📍 Database: ${MONGODB_URI}`);
 }).catch((err) => {
   console.error('❌ MongoDB connection error:', err);
   process.exit(1);
