@@ -10,13 +10,17 @@
             {{# each this}}
                 <div class="col-sm-6 col-md-4" style="padding: 25px">
                     <div class="img-thumbnail">
-                        <img src="{{this.imagepath}}" alt="..." class="img-responsive">
-                        <h3>{{this.title}}</h3>
-                        <p class="Description">{{this.description}}</p>
+                        <a href="/product/dogfood/{{this._id}}">
+                            <img src="{{this.imagepath}}" alt="..." class="img-responsive">
+                        </a>
+                        <h3><a href="/product/dogfood/{{this._id}}" style="text-decoration: none; color: inherit;">{{this.title}}</a></h3>
+                        <p class="Description">{{#if this.shortDescription}}{{this.shortDescription}}{{else}}{{this.description}}{{/if}}</p>
                         <div class="clearfix">
-                            <div class="price pull-left">Price:${{this.Price}}</div>
-                            <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary pull-right" role="button"><i class="fas fa-shopping-cart"></i> Add to cart</a>
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="#" class="btn btn-secondary pull-right disabled" role="button">Buy Now</a>
+                            <div class="price pull-left" style="margin-bottom: 10px;">Price: ${{this.Price}}</div>
+                        </div>
+                        <div class="clearfix" style="margin-top: 10px;">
+                            <a href="/product/dogfood/{{this._id}}" class="btn btn-info btn-block" role="button" style="margin-bottom: 8px;"><i class="fas fa-eye"></i> View Details</a>
+                            <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary btn-block" role="button"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                         </div>
                     </div>
                 </div>

@@ -18,6 +18,14 @@ var DogFoodSchema = new Schema({
         type: String,
         es_type: 'text'
     },
+    shortDescription: {
+        type: String,
+        es_type: 'text'
+    },
+    longDescription: {
+        type: String,
+        es_type: 'text'
+    },
     Price: {
         type: Number,
         es_type: 'double'

@@ -15,6 +15,9 @@ mongoose.connection.once('open', function() {
 var SuppliesSchema = new Schema({
     imagepath: { type: String, es_type: 'text' },
     Title: { type: String, es_type: 'text' },
+    description: { type: String },
+    shortDescription: { type: String, es_type: 'text' },
+    longDescription: { type: String, es_type: 'text' },
     Price: { type: String, es_type: 'text' }
 });
 

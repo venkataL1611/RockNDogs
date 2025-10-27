@@ -28,13 +28,9 @@
     items.forEach((item, idx) => {
       const node = document.createElement('a');
       node.className = 'ls-item';
-      node.href = '#';
-      node.onclick = function(e) {
-        e.preventDefault();
-        clearResults();
-        // For now just show alert, you can customize this
-        alert('Product: ' + (item.title || item.Title));
-      };
+      // Link to product detail page - assume dogfood type, could be improved
+      const productType = item._type || 'dogfood';
+      node.href = '/product/' + productType + '/' + (item._id || '');
       
       const img = item.imagepath ? '<img src="' + item.imagepath + '" alt="" class="ls-thumb">' : '';
       const title = item.title || item.Title || '';

@@ -62,6 +62,49 @@ router.get('/shop/dogfoods', function(req, res, next) {
     });
 });
 
+/* GET product detail page */
+router.get('/product/:type/:id', async function(req, res, next) {
+    const { type, id } = req.params;
+    console.log('Product detail route hit:', type, id);
+    
+    try {
+        let product = null;
+        let productType = type;
+        
+        if(type === 'dogfood') {
+            product = await canine.findById(id).lean().exec();
+        } else if(type === 'supply') {
+            product = await supplies.findById(id).lean().exec();
+        } else {
+            return res.status(404).render('error', { message: 'Invalid product type' });
+        }
+        
+        if(!product) {
+            return res.status(404).render('error', { message: 'Product not found' });
+        }
+        
+        // Normalize fields
+        product._type = productType;
+        product.displayTitle = product.title || product.Title;
+        product.displayPrice = product.Price;
+        
+        // Use detailedDescription if available, otherwise fall back to description
+        product.displayDescription = product.detailedDescription || product.description || 
+            (product.displayTitle + ' - High quality product for your beloved pets.');
+        
+        console.log('Product loaded:', product.displayTitle);
+        console.log('Using detailed description:', !!product.detailedDescription);
+        
+        res.render('shop/product-detail', { 
+            title: product.displayTitle, 
+            product: product 
+        });
+    } catch(err) {
+        console.error('Product detail error:', err);
+        res.status(500).render('error', { message: 'Error loading product' });
+    }
+});
+
 /*Get Supply Page*/
 router.get('/shop/supply', function(req, res, next) {
     supplies.find(function(err,docs){
