@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var client = require('../ElasticSearch/connection');
+var Review = require('../models/review');
+var mongoose = require('mongoose');
 
 // JSON search endpoint: supports fuzzy and prefix searching
 router.get('/api/search', async function(req, res){
@@ -72,6 +74,100 @@ router.get('/api/search', async function(req, res){
   } catch(err) {
     console.error('Search error', err);
     res.status(500).json({ error: 'search_failed' });
+  }
+});
+
+// Get reviews for a product
+router.get('/api/reviews/:type/:id', async function(req, res) {
+  const { type, id } = req.params;
+  
+  try {
+    const reviews = await Review.find({ 
+      productId: id, 
+      productType: type 
+    }).sort({ createdAt: -1 }).lean();
+    
+    // Calculate average rating
+    const avgRating = reviews.length > 0 
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+      : 0;
+    
+    // Rating distribution
+    const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    reviews.forEach(r => distribution[r.rating]++);
+    
+    res.json({
+      reviews: reviews,
+      totalReviews: reviews.length,
+      averageRating: Math.round(avgRating * 10) / 10,
+      distribution: distribution
+    });
+  } catch(err) {
+    console.error('Error fetching reviews:', err);
+    res.status(500).json({ error: 'fetch_failed' });
+  }
+});
+
+// Submit a new review
+router.post('/api/review', async function(req, res) {
+  const { productId, productType, rating, reviewTitle, reviewText } = req.body;
+  
+  // Validation
+  if (!productId || !productType || !rating || !reviewTitle || !reviewText) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  
+  if (rating < 1 || rating > 5) {
+    return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+  }
+  
+  try {
+    const review = new Review({
+      productId: productId,
+      productType: productType,
+      userName: req.user ? req.user.email : 'Anonymous',
+      userEmail: req.user ? req.user.email : null,
+      userId: req.user ? req.user._id : null,
+      rating: parseInt(rating),
+      reviewTitle: reviewTitle,
+      reviewText: reviewText,
+      verified: !!req.user, // Verified if logged in
+      helpful: 0,
+      createdAt: new Date()
+    });
+    
+    await review.save();
+    
+    res.json({ 
+      success: true, 
+      message: 'Review submitted successfully',
+      review: review 
+    });
+  } catch(err) {
+    console.error('Error saving review:', err);
+    res.status(500).json({ error: 'save_failed' });
+  }
+});
+
+// Mark review as helpful
+router.post('/api/review/:id/helpful', async function(req, res) {
+  const { id } = req.params;
+  
+  try {
+    const review = await Review.findByIdAndUpdate(
+      id,
+      { $inc: { helpful: 1 } },
+      { new: true }
+    );
+    
+    if (!review) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+    
+    res.json({ success: true, helpful: review.helpful });
+  } catch(err) {
+    console.error('Error updating helpful count:', err);
+    res.status(500).json({ error: 'update_failed' });
   }
 });
 

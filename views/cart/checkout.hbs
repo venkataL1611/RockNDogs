@@ -1,0 +1,174 @@
+<div class="container mt-4 mb-5">
+  <h1 class="mb-4">Checkout</h1>
+  
+  <div class="row">
+    <!-- Checkout Form -->
+    <div class="col-md-7">
+      <form id="checkout-form" action="/checkout/process" method="POST">
+        <!-- Shipping Address -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-shipping-fast"></i> Shipping Address</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" class="form-control" name="fullName" required value="{{user.name}}">
+            </div>
+            <div class="form-group">
+              <label>Address *</label>
+              <input type="text" class="form-control" name="address" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>City *</label>
+                  <input type="text" class="form-control" name="city" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>State *</label>
+                  <input type="text" class="form-control" name="state" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Zip Code *</label>
+                  <input type="text" class="form-control" name="zipCode" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" class="form-control" name="phone" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-credit-card"></i> Payment Method</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit_card" checked>
+              <label class="form-check-label" for="creditCard">
+                <i class="fas fa-credit-card"></i> Credit Card
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="debitCard" value="debit_card">
+              <label class="form-check-label" for="debitCard">
+                <i class="fas fa-credit-card"></i> Debit Card
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
+              <label class="form-check-label" for="paypal">
+                <i class="fab fa-paypal"></i> PayPal
+              </label>
+            </div>
+
+            <div id="card-details">
+              <hr>
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> This is a demo payment system. No real charges will be made.
+              </div>
+              <div class="form-group">
+                <label>Card Number *</label>
+                <input type="text" class="form-control" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Expiry Date *</label>
+                    <input type="text" class="form-control" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>CVV *</label>
+                    <input type="text" class="form-control" name="cvv" placeholder="123" maxlength="4">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg btn-block" id="place-order-btn">
+          <i class="fas fa-lock"></i> Place Order - ${{grandTotal}}
+        </button>
+      </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-5">
+      <div class="card sticky-top" style="top: 20px;">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <h6 class="mb-3">Items ({{totalQty}})</h6>
+          <div style="max-height: 300px; overflow-y: auto;">
+            {{#each products}}
+              <div class="d-flex mb-3">
+                <img src="{{this.item.imagepath}}" alt="" style="width:50px;height:50px;object-fit:cover;" class="mr-2">
+                <div class="flex-grow-1">
+                  <small class="d-block"><strong>{{this.item.title}}</strong></small>
+                  <small class="text-muted">Qty: {{this.qty}} × ${{this.item.Price}}</small>
+                </div>
+                <div>
+                  <small><strong>${{this.price}}</strong></small>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <strong>${{totalPrice}}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <strong>$5.00</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Tax (8%):</span>
+            <strong>${{taxAmount}}</strong>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between">
+            <h5>Total:</h5>
+            <h5 class="text-success">${{grandTotal}}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation and submission handling
+  document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    const btn = document.getElementById('place-order-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
+  });
+  
+  // Show/hide card details based on payment method
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const cardDetails = document.getElementById('card-details');
+      if (this.value === 'paypal') {
+        cardDetails.style.display = 'none';
+        cardDetails.querySelectorAll('input').forEach(input => input.required = false);
+      } else {
+        cardDetails.style.display = 'block';
+        cardDetails.querySelectorAll('input').forEach(input => input.required = true);
+      }
+    });
+  });
+</script>

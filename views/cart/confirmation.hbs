@@ -1,0 +1,94 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-success">
+        <div class="card-body text-center py-5">
+          <div class="mb-4">
+            <i class="fas fa-check-circle fa-5x text-success"></i>
+          </div>
+          <h1 class="text-success mb-3">Order Confirmed!</h1>
+          <p class="lead">Thank you for your purchase, {{order.userName}}!</p>
+          <p class="text-muted">Your order has been successfully placed and is being processed.</p>
+          
+          <div class="card bg-light my-4">
+            <div class="card-body">
+              <h5>Order Details</h5>
+              <table class="table table-borderless mb-0">
+                <tr>
+                  <td class="text-left"><strong>Order Number:</strong></td>
+                  <td class="text-right"><span class="badge badge-primary">{{order.orderNumber}}</span></td>
+                </tr>
+                <tr>
+                  <td class="text-left"><strong>Order Date:</strong></td>
+                  <td class="text-right">{{order.createdAt}}</td>
+                </tr>
+                <tr>
+                  <td class="text-left"><strong>Estimated Delivery:</strong></td>
+                  <td class="text-right">{{order.estimatedDelivery}}</td>
+                </tr>
+                <tr>
+                  <td class="text-left"><strong>Total Amount:</strong></td>
+                  <td class="text-right"><h5 class="text-success mb-0">${{order.total}}</h5></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h6 class="mb-0">Order Items</h6>
+            </div>
+            <div class="card-body">
+              {{#each order.items}}
+                <div class="d-flex align-items-center mb-3">
+                  <img src="{{this.imagepath}}" alt="" style="width:60px;height:60px;object-fit:cover;" class="mr-3 img-thumbnail">
+                  <div class="flex-grow-1 text-left">
+                    <strong>{{this.title}}</strong><br>
+                    <small class="text-muted">Qty: {{this.quantity}} × ${{this.price}}</small>
+                  </div>
+                  <div>
+                    <strong>${{this.totalPrice}}</strong>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h6 class="mb-0">Shipping Address</h6>
+            </div>
+            <div class="card-body text-left">
+              <p class="mb-1"><strong>{{order.shippingAddress.fullName}}</strong></p>
+              <p class="mb-1">{{order.shippingAddress.address}}</p>
+              <p class="mb-1">{{order.shippingAddress.city}}, {{order.shippingAddress.state}} {{order.shippingAddress.zipCode}}</p>
+              <p class="mb-0">Phone: {{order.shippingAddress.phone}}</p>
+            </div>
+          </div>
+          
+          <p class="text-muted mb-4">
+            <i class="fas fa-envelope"></i> A confirmation email has been sent to your email address.
+          </p>
+          
+          <div class="btn-group" role="group">
+            <a href="/home" class="btn btn-primary">
+              <i class="fas fa-home"></i> Continue Shopping
+            </a>
+            <button onclick="window.print()" class="btn btn-outline-secondary">
+              <i class="fas fa-print"></i> Print Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Calculate individual item totals
+  document.querySelectorAll('[data-price]').forEach(el => {
+    const qty = parseInt(el.getAttribute('data-qty'));
+    const price = parseFloat(el.getAttribute('data-price'));
+    el.textContent = '$' + (qty * price).toFixed(2);
+  });
+</script>

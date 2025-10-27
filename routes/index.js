@@ -83,6 +83,10 @@ router.get('/product/:type/:id', async function(req, res, next) {
             return res.status(404).render('error', { message: 'Product not found' });
         }
         
+        console.log('Raw product fields:', Object.keys(product));
+        console.log('product.title:', product.title);
+        console.log('product.Title:', product.Title);
+        
         // Normalize fields
         product._type = productType;
         product.displayTitle = product.title || product.Title;
@@ -93,6 +97,7 @@ router.get('/product/:type/:id', async function(req, res, next) {
             (product.displayTitle + ' - High quality product for your beloved pets.');
         
         console.log('Product loaded:', product.displayTitle);
+        console.log('Display price:', product.displayPrice);
         console.log('Using long description:', !!product.longDescription);
         
         res.render('shop/product-detail', { 

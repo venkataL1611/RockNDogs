@@ -66,124 +66,39 @@
       <h3 class="mb-4">Customer Reviews</h3>
       
       <!-- Review Summary -->
-      <div class="card mb-4">
+      <div class="card mb-4" id="review-summary">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
-              <h1 class="display-4">4.5</h1>
-              <div class="text-warning mb-2">
+              <h1 class="display-4" id="avg-rating">--</h1>
+              <div class="text-warning mb-2" id="avg-stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
+                <i class="fas fa-star"></i>
               </div>
-              <p class="text-muted">Based on 24 reviews</p>
+              <p class="text-muted" id="total-reviews">Loading...</p>
             </div>
-            <div class="col-md-9">
-              <div class="mb-2">
-                <span class="mr-2">5 stars</span>
-                <div class="progress" style="height: 20px; display: inline-block; width: 60%;">
-                  <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
-                </div>
-                <span class="ml-2">70%</span>
-              </div>
-              <div class="mb-2">
-                <span class="mr-2">4 stars</span>
-                <div class="progress" style="height: 20px; display: inline-block; width: 60%;">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 20%"></div>
-                </div>
-                <span class="ml-2">20%</span>
-              </div>
-              <div class="mb-2">
-                <span class="mr-2">3 stars</span>
-                <div class="progress" style="height: 20px; display: inline-block; width: 60%;">
-                  <div class="progress-bar bg-warning" role="progressbar" style="width: 8%"></div>
-                </div>
-                <span class="ml-2">8%</span>
-              </div>
-              <div class="mb-2">
-                <span class="mr-2">2 stars</span>
-                <div class="progress" style="height: 20px; display: inline-block; width: 60%;">
-                  <div class="progress-bar bg-danger" role="progressbar" style="width: 2%"></div>
-                </div>
-                <span class="ml-2">2%</span>
-              </div>
+            <div class="col-md-9" id="rating-distribution">
+              <!-- Distribution bars will be populated by JavaScript -->
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Individual Reviews -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h5 class="card-title">John D.</h5>
-              <div class="text-warning mb-2">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-            <small class="text-muted">2 weeks ago</small>
+      <!-- Individual Reviews Container -->
+      <div id="reviews-container">
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading reviews...</span>
           </div>
-          <p class="card-text">Excellent product! My dog absolutely loves it. Great quality and fast delivery.</p>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="far fa-thumbs-up"></i> Helpful (12)
-          </button>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h5 class="card-title">Sarah M.</h5>
-              <div class="text-warning mb-2">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-              </div>
-            </div>
-            <small class="text-muted">1 month ago</small>
-          </div>
-          <p class="card-text">Very good value for money. The quality is great and my pets are happy!</p>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="far fa-thumbs-up"></i> Helpful (8)
-          </button>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h5 class="card-title">Mike R.</h5>
-              <div class="text-warning mb-2">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-            <small class="text-muted">2 months ago</small>
-          </div>
-          <p class="card-text">Highly recommend! Been buying this for months now and the quality is consistently good.</p>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="far fa-thumbs-up"></i> Helpful (15)
-          </button>
         </div>
       </div>
 
       <!-- Write Review Button -->
-      <div class="text-center mt-4">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#reviewModal">
+      <div class="text-center mt-4 mb-4">
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#writeReviewModal">
           <i class="fas fa-edit"></i> Write a Review
         </button>
       </div>
@@ -201,8 +116,8 @@
   </div>
 </div>
 
-<!-- Review Modal -->
-<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog">
+<!-- Write Review Modal -->
+<div class="modal fade" id="writeReviewModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -212,35 +127,42 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="review-form">
           <div class="form-group">
-            <label>Rating</label>
-            <div>
+            <label>Rating *</label>
+            <div id="star-input" style="font-size: 24px; cursor: pointer;">
               <i class="far fa-star star-rating" data-rating="1"></i>
               <i class="far fa-star star-rating" data-rating="2"></i>
               <i class="far fa-star star-rating" data-rating="3"></i>
               <i class="far fa-star star-rating" data-rating="4"></i>
               <i class="far fa-star star-rating" data-rating="5"></i>
             </div>
+            <input type="hidden" id="rating-value" name="rating" value="0">
           </div>
           <div class="form-group">
-            <label>Your Name</label>
-            <input type="text" class="form-control" placeholder="Enter your name">
+            <label>Review Title *</label>
+            <input type="text" class="form-control" id="review-title" name="reviewTitle" placeholder="Summary of your review" required>
           </div>
           <div class="form-group">
-            <label>Review Title</label>
-            <input type="text" class="form-control" placeholder="Summary of your review">
+            <label>Your Review *</label>
+            <textarea class="form-control" id="review-text" name="reviewText" rows="4" placeholder="Tell us about your experience with this product" required></textarea>
           </div>
-          <div class="form-group">
-            <label>Your Review</label>
-            <textarea class="form-control" rows="4" placeholder="Tell us about your experience"></textarea>
-          </div>
+          <div class="alert alert-info" id="review-status" style="display: none;"></div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Submit Review</button>
+        <button type="button" class="btn btn-primary" id="submit-review-btn">Submit Review</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Pass product data to JavaScript
+  window.productData = {
+    id: '{{product._id}}',
+    type: '{{product._type}}'
+  };
+</script>
+<script src="/javascripts/product-reviews.js"></script>

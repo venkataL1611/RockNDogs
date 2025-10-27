@@ -3,14 +3,21 @@ var router = express.Router();
 var Cart = require('../lib/cart');
 var DogFood = require('../models/dogfood');
 var Supply = require('../models/supply');
+var Order = require('../models/order');
 
 router.get('/cart', function(req, res) {
   var cart = new Cart(req.session.cart ? req.session.cart : {});
+  const totalPrice = cart.totalPrice;
+  const taxAmount = (totalPrice * 0.08).toFixed(2);
+  const grandTotal = (totalPrice + 5 + parseFloat(taxAmount)).toFixed(2);
+  
   res.render('cart/cart', {
     title: 'Your Cart',
     products: cart.generateArray(),
-    totalPrice: cart.totalPrice,
-    totalQty: cart.totalQty
+    totalPrice: totalPrice,
+    totalQty: cart.totalQty,
+    taxAmount: taxAmount,
+    grandTotal: grandTotal
   });
 });
 
@@ -43,6 +50,207 @@ router.get('/cart/add/:type/:id', async function(req, res) {
   } catch (err) {
     console.error(err);
     res.redirect('/');
+  }
+});
+
+// Remove item from cart
+router.get('/cart/remove/:id', function(req, res) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+  
+  if (cart.items && cart.items[productId]) {
+    cart.totalQty -= cart.items[productId].qty;
+    cart.totalPrice -= cart.items[productId].price;
+    delete cart.items[productId];
+    req.session.cart = cart;
+  }
+  
+  res.redirect('/cart');
+});
+
+// Increase quantity
+router.get('/cart/increase/:id', function(req, res) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+  
+  if (cart.items && cart.items[productId]) {
+    cart.items[productId].qty++;
+    cart.items[productId].price += cart.items[productId].item.Price;
+    cart.totalQty++;
+    cart.totalPrice += cart.items[productId].item.Price;
+    req.session.cart = cart;
+  }
+  
+  res.redirect('/cart');
+});
+
+// Decrease quantity
+router.get('/cart/decrease/:id', function(req, res) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+  
+  if (cart.items && cart.items[productId] && cart.items[productId].qty > 1) {
+    cart.items[productId].qty--;
+    cart.items[productId].price -= cart.items[productId].item.Price;
+    cart.totalQty--;
+    cart.totalPrice -= cart.items[productId].item.Price;
+    req.session.cart = cart;
+  }
+  
+  res.redirect('/cart');
+});
+
+// Checkout page
+router.get('/checkout', function(req, res) {
+  if (!req.session.cart || !req.session.cart.totalQty) {
+    return res.redirect('/cart');
+  }
+  
+  var cart = new Cart(req.session.cart);
+  const totalPrice = cart.totalPrice;
+  const taxAmount = (totalPrice * 0.08).toFixed(2);
+  const grandTotal = (totalPrice + 5 + parseFloat(taxAmount)).toFixed(2);
+  
+  res.render('cart/checkout', {
+    title: 'Checkout',
+    products: cart.generateArray(),
+    totalPrice: totalPrice,
+    totalQty: cart.totalQty,
+    taxAmount: taxAmount,
+    grandTotal: grandTotal
+  });
+});
+
+// Process checkout - Dummy payment gateway
+router.post('/checkout/process', async function(req, res) {
+  console.log('[TRACE] Checkout process started');
+  const startTime = Date.now();
+  
+  if (!req.session.cart || !req.session.cart.totalQty) {
+    return res.redirect('/cart');
+  }
+  
+  try {
+    console.log('[TRACE] Creating order from cart');
+    const cart = new Cart(req.session.cart);
+    const { fullName, address, city, state, zipCode, phone, paymentMethod } = req.body;
+    
+    // Calculate totals
+    const subtotal = cart.totalPrice;
+    const tax = parseFloat((subtotal * 0.08).toFixed(2));
+    const total = subtotal + 5 + tax;
+    
+    // Prepare order items
+    const items = cart.generateArray().map(item => ({
+      productId: item.item._id,
+      productType: item.item.type || 'dogfood',
+      title: item.item.title,
+      price: item.item.Price,
+      quantity: item.qty,
+      imagepath: item.item.imagepath
+    }));
+    
+    // Simulate payment processing
+    console.log('[TRACE] Processing payment via', paymentMethod);
+    const paymentResult = await simulatePaymentGateway(paymentMethod, total);
+    console.log('[TRACE] Payment result:', paymentResult.status);
+    
+    if (paymentResult.status === 'failed') {
+      return res.render('cart/payment-failed', {
+        title: 'Payment Failed',
+        message: paymentResult.message
+      });
+    }
+    
+    // Create order
+    console.log('[TRACE] Creating order in database');
+    const orderNumber = 'ORD' + Date.now() + Math.floor(Math.random() * 10000);
+    const order = new Order({
+      orderNumber: orderNumber,
+      userId: req.user ? req.user._id : null,
+      userEmail: req.user ? req.user.email : 'guest@example.com',
+      userName: fullName,
+      items: items,
+      subtotal: subtotal,
+      shipping: 5.00,
+      tax: tax,
+      total: total,
+      shippingAddress: { fullName, address, city, state, zipCode, phone },
+      paymentMethod: paymentMethod,
+      paymentStatus: 'completed',
+      transactionId: paymentResult.transactionId,
+      orderStatus: 'confirmed',
+      estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+    });
+    
+    await order.save();
+    console.log('[TRACE] Order saved:', order.orderNumber);
+    
+    // Clear cart
+    req.session.cart = null;
+    
+    const duration = Date.now() - startTime;
+    console.log('[TRACE] Checkout process completed in', duration, 'ms');
+    
+    // Redirect to confirmation page
+    res.redirect('/order/confirmation/' + order.orderNumber);
+    
+  } catch (err) {
+    console.error('[TRACE] Checkout error:', err);
+    res.render('cart/payment-failed', {
+      title: 'Order Failed',
+      message: 'An error occurred while processing your order. Please try again.'
+    });
+  }
+});
+
+// Simulate payment gateway (for learning distributed tracing)
+async function simulatePaymentGateway(paymentMethod, amount) {
+  console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
+  
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+  
+  // Generate random number for testing
+  const random = Math.random();
+  console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
+  
+  // Simulate random failures (5% chance - reduced for better testing)
+  if (random < 0.05) {
+    console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
+    return {
+      status: 'failed',
+      message: 'Payment was declined. Please check your payment details and try again.'
+    };
+  }
+  
+  // Generate transaction ID
+  const transactionId = 'TXN' + Date.now() + Math.floor(Math.random() * 10000);
+  
+  console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
+  return {
+    status: 'success',
+    transactionId: transactionId,
+    amount: amount
+  };
+}
+
+// Order confirmation page
+router.get('/order/confirmation/:orderNumber', async function(req, res) {
+  try {
+    const order = await Order.findOne({ orderNumber: req.params.orderNumber });
+    
+    if (!order) {
+      return res.status(404).render('error', { message: 'Order not found' });
+    }
+    
+    res.render('cart/confirmation', {
+      title: 'Order Confirmation',
+      order: order
+    });
+  } catch (err) {
+    console.error('Error fetching order:', err);
+    res.status(500).render('error', { message: 'Error loading order' });
   }
 });
 
