@@ -15,12 +15,12 @@
                         </a>
                         <h3><a href="/product/dogfood/{{this._id}}" style="text-decoration: none; color: inherit;">{{this.title}}</a></h3>
                         <p class="Description">{{#if this.shortDescription}}{{this.shortDescription}}{{else}}{{this.description}}{{/if}}</p>
-                        <div class="clearfix">
-                            <div class="price pull-left" style="margin-bottom: 10px;">Price: ${{this.Price}}</div>
+                        <div class="clearfix" style="margin-top: 15px;">
+                            <div class="price" style="margin-bottom: 10px;">Price: ${{this.Price}}</div>
                         </div>
-                        <div class="clearfix" style="margin-top: 10px;">
-                            <a href="/product/dogfood/{{this._id}}" class="btn btn-info btn-block" role="button" style="margin-bottom: 8px;"><i class="fas fa-eye"></i> View Details</a>
-                            <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary btn-block" role="button"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        <div class="clearfix">
+                            <a href="/product/dogfood/{{this._id}}" class="btn btn-info btn-sm pull-left" role="button"><i class="fas fa-eye"></i> View</a>
+                            <a href="/cart/add/dogfood/{{this._id}}" class="btn btn-primary btn-sm pull-right" role="button"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                         </div>
                     </div>
                 </div>

@@ -88,12 +88,12 @@ router.get('/product/:type/:id', async function(req, res, next) {
         product.displayTitle = product.title || product.Title;
         product.displayPrice = product.Price;
         
-        // Use detailedDescription if available, otherwise fall back to description
-        product.displayDescription = product.detailedDescription || product.description || 
+        // Use longDescription for detail page, shortDescription for listing preview
+        product.displayDescription = product.longDescription || product.detailedDescription || product.description || 
             (product.displayTitle + ' - High quality product for your beloved pets.');
         
         console.log('Product loaded:', product.displayTitle);
-        console.log('Using detailed description:', !!product.detailedDescription);
+        console.log('Using long description:', !!product.longDescription);
         
         res.render('shop/product-detail', { 
             title: product.displayTitle, 
