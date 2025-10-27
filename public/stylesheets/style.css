@@ -1,6 +1,6 @@
 body {
-  /* Warm sandy/golden retriever color - soft and inviting */
-  background: linear-gradient(135deg, #f5deb3 0%, #daa520 100%);
+  /* Solid moccasin background (original) */
+  background: moccasin;
   background-attachment: fixed;
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
