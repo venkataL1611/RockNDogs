@@ -1,6 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var rateLimit = require('express-rate-limit');
+var { body, validationResult } = require('express-validator');
+
+// Rate limiter for login attempts
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 login requests per windowMs
+  message: 'Too many login attempts from this IP, please try again after 15 minutes',
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true // Don't count successful logins
+});
 
 function ensureGuest(req, res, next){
   if(req.isAuthenticated()) {
@@ -23,12 +35,34 @@ router.get('/login', ensureGuest, function(req, res){
   res.render('auth/login', { title: 'Login', message: message });
 });
 
-router.post('/login', ensureGuest, function(req, res, next) {
-  passport.authenticate('local-login', function(err, user, info) {
+router.post('/login', 
+  loginLimiter, 
+  // Input validation
+  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email'),
+  body('password').notEmpty().withMessage('Password is required'),
+  function(req, res, next) {
+    // If already authenticated, redirect to home
+    if(req.isAuthenticated()) {
+      return res.redirect('/');
+    }
+    
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('auth/login', { 
+        title: 'Login', 
+        message: 'Invalid email or password format' 
+      });
+    }
+    
+    passport.authenticate('local-login', function(err, user, info) {
     if (err) return next(err);
     if (!user) {
       console.log('Login failed - no user');
-      return res.redirect('/login');
+      return res.render('auth/login', { 
+        title: 'Login', 
+        message: info && info.message ? info.message : 'Invalid email or password' 
+      });
     }
     
     req.logIn(user, function(err) {
@@ -54,7 +88,13 @@ router.get('/signup', ensureGuest, function(req, res){
   res.render('auth/signup', { title: 'Sign up' });
 });
 
-router.post('/signup', ensureGuest, passport.authenticate('local-signup', {
+router.post('/signup', 
+  ensureGuest,
+  // Input validation
+  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  body('name').trim().notEmpty().withMessage('Name is required'),
+  passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/signup'
 }));

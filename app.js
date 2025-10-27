@@ -13,6 +13,11 @@ var expressLayouts = require('express-ejs-layouts');
 var ejs = require('ejs');
 var engine = require('ejs-mate');
 
+// Security packages
+var helmet = require('helmet');
+var rateLimit = require('express-rate-limit');
+var mongoSanitize = require('express-mongo-sanitize');
+
 
 var indexRouter = require('./routes/index');
 
@@ -38,16 +43,57 @@ app.engine('.hbs',expressHbs({
 }));
 app.set('view engine', '.hbs');
 
+// Security Middleware
+// 1. Helmet - Set security HTTP headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://stackpath.bootstrapcdn.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://stackpath.bootstrapcdn.com"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com", "data:"],
+      imgSrc: ["'self'", "data:", "https:"]
+    }
+  }
+}));
+
+// 2. MongoDB sanitization - Prevent NoSQL injection
+app.use(mongoSanitize());
+
+// 3. Rate limiting for login attempts
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 login requests per windowMs
+  message: 'Too many login attempts from this IP, please try again after 15 minutes',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// 4. General API rate limiting
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// Sessions (dev-only MemoryStore; replace with connect-mongo in production)
+
+// Sessions with secure settings
 app.use(session({
     secret: 'rockndogs-secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true, // Prevents XSS attacks by making cookie inaccessible to JavaScript
+        secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+        sameSite: 'strict', // Prevents CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 
 // Passport
@@ -81,10 +127,15 @@ app.use(engine);*/
 
 
 app.use('/', indexRouter);
+// Apply rate limiting to auth routes
 app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/cart'));
-// API routes (live search)
-app.use('/', require('./routes/api'));
+// API routes with rate limiting
+app.use('/api', apiLimiter, require('./routes/api'));
+
+// Make rate limiters available to routes
+app.set('loginLimiter', loginLimiter);
+app.set('apiLimiter', apiLimiter);
 
 
 app.use(function(req, res, next) {
