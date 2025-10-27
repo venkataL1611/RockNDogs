@@ -83,13 +83,13 @@ jobs:
       run: node tests/seed-test-data.js
       env:
         NODE_ENV: test
-        MONGODB_URI: mongodb://localhost:27017/shopping
+        MONGODB_URI: mongodb://localhost:27017/shopping_test
     
     - name: Run Unit Tests
       run: npm run test:unit
       env:
         NODE_ENV: test
-        MONGODB_URI: mongodb://localhost:27017/shopping
+        MONGODB_URI: mongodb://localhost:27017/shopping_test
     
     - name: Start Application
       run: npm start &
