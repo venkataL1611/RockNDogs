@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
 /**
+ * Initialize OpenTelemetry tracing BEFORE any other imports
+ * This must be the first require to instrument all modules
+ */
+require('../tracing');
+
+/**
  * Module dependencies.
  */
 

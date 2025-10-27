@@ -5,38 +5,68 @@ const Cart = require('../lib/cart');
 const DogFood = require('../models/dogfood');
 const Supply = require('../models/supply');
 const Order = require('../models/order');
+const { trace } = require('@opentelemetry/api');
+
+const tracer = trace.getTracer('rockndogs-cart');
 
 // Simulate payment gateway (for learning distributed tracing)
 async function simulatePaymentGateway(paymentMethod, amount) {
-  console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
+  // Create a custom span for payment processing
+  return tracer.startActiveSpan('payment-gateway.process', async (span) => {
+    try {
+      span.setAttributes({
+        'payment.method': paymentMethod,
+        'payment.amount': amount,
+        'payment.gateway': 'simulated',
+      });
 
-  // Simulate network delay
-  await new Promise((resolve) => {
-    setTimeout(resolve, 500 + Math.random() * 1000);
+      console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
+
+      // Simulate network delay
+      await new Promise((resolve) => {
+        setTimeout(resolve, 500 + Math.random() * 1000);
+      });
+
+      // Generate random number for testing
+      const random = Math.random();
+      console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
+
+      // Simulate random failures (5% chance - reduced for better testing)
+      if (random < 0.05) {
+        console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
+        span.setAttributes({
+          'payment.status': 'failed',
+          'payment.error': 'declined',
+        });
+        span.recordException(new Error('Payment declined'));
+        span.end();
+        return {
+          status: 'failed',
+          message: 'Payment was declined. Please check your payment details and try again.'
+        };
+      }
+
+      // Generate transaction ID
+      const transactionId = `TXN${Date.now()}${Math.floor(Math.random() * 10000)}`;
+
+      console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
+      span.setAttributes({
+        'payment.status': 'success',
+        'payment.transaction_id': transactionId,
+      });
+      span.end();
+
+      return {
+        status: 'success',
+        transactionId,
+        amount
+      };
+    } catch (error) {
+      span.recordException(error);
+      span.end();
+      throw error;
+    }
   });
-
-  // Generate random number for testing
-  const random = Math.random();
-  console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
-
-  // Simulate random failures (5% chance - reduced for better testing)
-  if (random < 0.05) {
-    console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
-    return {
-      status: 'failed',
-      message: 'Payment was declined. Please check your payment details and try again.'
-    };
-  }
-
-  // Generate transaction ID
-  const transactionId = `TXN${Date.now()}${Math.floor(Math.random() * 10000)}`;
-
-  console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
-  return {
-    status: 'success',
-    transactionId,
-    amount
-  };
 }
 function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) return next();
