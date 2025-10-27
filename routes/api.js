@@ -1,13 +1,14 @@
-var express = require('express');
-var router = express.Router();
-var client = require('../ElasticSearch/connection');
-var Review = require('../models/review');
-var mongoose = require('mongoose');
+const express = require('express');
+
+const router = express.Router();
+const mongoose = require('mongoose');
+const client = require('../ElasticSearch/connection');
+const Review = require('../models/review');
 
 // JSON search endpoint: supports fuzzy and prefix searching
-router.get('/api/search', async function(req, res){
+router.get('/search', async function (req, res) {
   const q = (req.query.q || '').trim();
-  if(!q) return res.json({ results: [] });
+  if (!q) return res.json({ results: [] });
 
   // Search dogfoods
   const dogfoodBody = {
@@ -45,25 +46,25 @@ router.get('/api/search', async function(req, res){
     ]);
 
     // Normalize dogfood results
-    const dogfoodHits = (dogfoodResult.body && dogfoodResult.body.hits && dogfoodResult.body.hits.hits) 
-      ? dogfoodResult.body.hits.hits 
+    const dogfoodHits = (dogfoodResult.body && dogfoodResult.body.hits && dogfoodResult.body.hits.hits)
+      ? dogfoodResult.body.hits.hits
       : (dogfoodResult.hits && dogfoodResult.hits.hits ? dogfoodResult.hits.hits : []);
-    
-    const dogfoodData = dogfoodHits.map(h => {
-      const src = Object.assign({}, h._source || {});
-      if(!src._id) src._id = h._id;
+
+    const dogfoodData = dogfoodHits.map((h) => {
+      const src = { ...h._source || {} };
+      if (!src._id) src._id = h._id;
       src._type = 'dogfood';
       return src;
     });
 
     // Normalize supply results
-    const supplyHits = (supplyResult.body && supplyResult.body.hits && supplyResult.body.hits.hits) 
-      ? supplyResult.body.hits.hits 
+    const supplyHits = (supplyResult.body && supplyResult.body.hits && supplyResult.body.hits.hits)
+      ? supplyResult.body.hits.hits
       : (supplyResult.hits && supplyResult.hits.hits ? supplyResult.hits.hits : []);
-    
-    const supplyData = supplyHits.map(h => {
-      const src = Object.assign({}, h._source || {});
-      if(!src._id) src._id = h._id;
+
+    const supplyData = supplyHits.map((h) => {
+      const src = { ...h._source || {} };
+      if (!src._id) src._id = h._id;
       src._type = 'supply';
       return src;
     });
@@ -71,101 +72,105 @@ router.get('/api/search', async function(req, res){
     // Combine and return results
     const combinedResults = [...dogfoodData, ...supplyData];
     res.json({ results: combinedResults });
-  } catch(err) {
+  } catch (err) {
     console.error('Search error', err);
     res.status(500).json({ error: 'search_failed' });
   }
 });
 
 // Get reviews for a product
-router.get('/api/reviews/:type/:id', async function(req, res) {
+router.get('/reviews/:type/:id', async function (req, res) {
   const { type, id } = req.params;
-  
+
   try {
-    const reviews = await Review.find({ 
-      productId: id, 
-      productType: type 
+    const reviews = await Review.find({
+      productId: id,
+      productType: type
     }).sort({ createdAt: -1 }).lean();
-    
+
     // Calculate average rating
-    const avgRating = reviews.length > 0 
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+    const avgRating = reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
       : 0;
-    
+
     // Rating distribution
-    const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-    reviews.forEach(r => distribution[r.rating]++);
-    
+    const distribution = {
+      5: 0, 4: 0, 3: 0, 2: 0, 1: 0
+    };
+    reviews.forEach((r) => distribution[r.rating]++);
+
     res.json({
-      reviews: reviews,
+      reviews,
       totalReviews: reviews.length,
       averageRating: Math.round(avgRating * 10) / 10,
-      distribution: distribution
+      distribution
     });
-  } catch(err) {
+  } catch (err) {
     console.error('Error fetching reviews:', err);
     res.status(500).json({ error: 'fetch_failed' });
   }
 });
 
 // Submit a new review
-router.post('/api/review', async function(req, res) {
-  const { productId, productType, rating, reviewTitle, reviewText } = req.body;
-  
+router.post('/review', async function (req, res) {
+  const {
+    productId, productType, rating, reviewTitle, reviewText
+  } = req.body;
+
   // Validation
   if (!productId || !productType || !rating || !reviewTitle || !reviewText) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  
+
   if (rating < 1 || rating > 5) {
     return res.status(400).json({ error: 'Rating must be between 1 and 5' });
   }
-  
+
   try {
     const review = new Review({
-      productId: productId,
-      productType: productType,
+      productId,
+      productType,
       userName: req.user ? req.user.email : 'Anonymous',
       userEmail: req.user ? req.user.email : null,
       userId: req.user ? req.user._id : null,
       rating: parseInt(rating),
-      reviewTitle: reviewTitle,
-      reviewText: reviewText,
+      reviewTitle,
+      reviewText,
       verified: !!req.user, // Verified if logged in
       helpful: 0,
       createdAt: new Date()
     });
-    
+
     await review.save();
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       message: 'Review submitted successfully',
-      review: review 
+      review
     });
-  } catch(err) {
+  } catch (err) {
     console.error('Error saving review:', err);
     res.status(500).json({ error: 'save_failed' });
   }
 });
 
 // Mark review as helpful
-router.post('/api/review/:id/helpful', async function(req, res) {
+router.post('/review/:id/helpful', async function (req, res) {
   const { id } = req.params;
-  
+
   try {
     const review = await Review.findByIdAndUpdate(
       id,
       { $inc: { helpful: 1 } },
       { new: true }
     );
-    
+
     if (!review) {
       return res.status(404).json({ error: 'Review not found' });
     }
-    
+
     res.json({ success: true, helpful: review.helpful });
-  } catch(err) {
+  } catch (err) {
     console.error('Error updating helpful count:', err);
     res.status(500).json({ error: 'update_failed' });
   }

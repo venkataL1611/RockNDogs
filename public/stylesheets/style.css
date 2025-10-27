@@ -1,5 +1,7 @@
 body {
-    background-color: moccasin;
+  /* Warm sandy/golden retriever color - soft and inviting */
+  background: linear-gradient(135deg, #f5deb3 0%, #daa520 100%);
+  background-attachment: fixed;
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -18,8 +20,11 @@ a {
   color: black ;
 }
 .product{
-  background-color: seashell;
+  /* Light cream color for content area - like a puppy's belly */
+  background-color: #fff8dc;
   padding:50px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
 }
 .price{
   padding-bottom: 10px;

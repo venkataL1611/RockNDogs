@@ -7,7 +7,7 @@ setTimeout(async () => {
   try {
     const cats = await Category.find().exec();
     console.log('Total categories:', cats.length);
-    cats.forEach(c => console.log('  -', c.title, '(ID:', c._id + ')'));
+    cats.forEach((c) => console.log('  -', c.title, '(ID:', `${c._id})`));
   } catch (err) {
     console.error('Error:', err);
   } finally {

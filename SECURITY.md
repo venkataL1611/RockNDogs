@@ -16,9 +16,18 @@ This document outlines the security measures implemented in the RockNDogs e-comm
 - ✅ **X-Content-Type-Options** - Prevents MIME-sniffing
 - ✅ **X-XSS-Protection** - Enables browser XSS protection
 - ✅ **Content-Security-Policy** - Restricts resource loading
-- ✅ **Strict-Transport-Security** - Forces HTTPS (in production)
+- ✅ **Strict-Transport-Security (HSTS)** - Forces HTTPS (in production)
+- ✅ **Upgrade Insecure Requests** - Automatically upgrades HTTP to HTTPS
 
-### 3. Rate Limiting
+### 3. MITM (Man-in-the-Middle) Attack Protection
+- ✅ **HSTS Headers** - max-age: 1 year, includeSubDomains, preload
+- ✅ **Secure cookies** - Only transmitted over HTTPS in production
+- ✅ **Subresource Integrity (SRI)** - Integrity checks on CDN resources
+- ✅ **Trust proxy configuration** - Proper HTTPS detection behind proxies
+- ⚠️ **Environment-based session secrets** - Must set SESSION_SECRET in production
+- ⚠️ **HTTPS required in production** - See deployment guide below
+
+### 4. Rate Limiting
 - ✅ **Login rate limiting** - Max 5 attempts per 15 minutes per IP
 - ✅ **API rate limiting** - Max 100 requests per 15 minutes per IP
 - ✅ **Prevents brute force attacks** and DoS attempts
@@ -58,14 +67,69 @@ This document outlines the security measures implemented in the RockNDogs e-comm
    export NODE_ENV=production
    ```
 
-2. **Use strong session secret**
-   ```javascript
-   secret: process.env.SESSION_SECRET // Generate with crypto.randomBytes(64).toString('hex')
+2. **Generate and use strong session secret**
+   ```bash
+   # Generate a secure random secret
+   node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+   
+   # Set it in .env file
+   SESSION_SECRET=your_generated_secret_here
    ```
 
-3. **Enable HTTPS**
-   - Use Let's Encrypt for free SSL certificates
-   - Configure reverse proxy (nginx/Apache) for HTTPS
+3. **Enable HTTPS (CRITICAL for MITM Protection)**
+   
+   **Option A: Using nginx as reverse proxy**
+   ```nginx
+   server {
+       listen 443 ssl http2;
+       server_name yourdomain.com;
+       
+       ssl_certificate /path/to/cert.pem;
+       ssl_certificate_key /path/to/key.pem;
+       
+       # Strong SSL configuration
+       ssl_protocols TLSv1.2 TLSv1.3;
+       ssl_ciphers HIGH:!aNULL:!MD5;
+       ssl_prefer_server_ciphers on;
+       
+       location / {
+           proxy_pass http://localhost:3000;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header Host $host;
+       }
+   }
+   
+   # Redirect HTTP to HTTPS
+   server {
+       listen 80;
+       server_name yourdomain.com;
+       return 301 https://$server_name$request_uri;
+   }
+   ```
+   
+   **Option B: Using Let's Encrypt (Free SSL)**
+   ```bash
+   # Install certbot
+   sudo apt-get install certbot
+   
+   # Get certificate
+   sudo certbot certonly --standalone -d yourdomain.com
+   ```
+   
+   **Option C: Node.js with HTTPS module**
+   ```javascript
+   // In bin/www or server file
+   const https = require('https');
+   const fs = require('fs');
+   
+   const options = {
+     key: fs.readFileSync('path/to/private-key.pem'),
+     cert: fs.readFileSync('path/to/certificate.pem')
+   };
+   
+   https.createServer(options, app).listen(443);
+   ```
 
 4. **Use MongoDB with authentication**
    ```javascript

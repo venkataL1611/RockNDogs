@@ -1,38 +1,34 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var expressHbs=require('express-handlebars');
-var mongoose=require('mongoose'),
-    mongoosastic=require('mongoosastic');
-var session=require('express-session');
-var passport = require('passport');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const expressHbs = require('express-handlebars');
+const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
+const session = require('express-session');
+const passport = require('passport');
 require('./config/passport');
-var expressLayouts = require('express-ejs-layouts');
-var ejs = require('ejs');
-var engine = require('ejs-mate');
+const expressLayouts = require('express-ejs-layouts');
+const ejs = require('ejs');
+const engine = require('ejs-mate');
 
 // Security packages
-var helmet = require('helmet');
-var rateLimit = require('express-rate-limit');
-var mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 
+const indexRouter = require('./routes/index');
 
-var indexRouter = require('./routes/index');
-
-
-
-var app = express();
+const app = express();
 mongoose.connect('mongodb://localhost:27017/shopping');
 
-
 // view engine setup
-app.engine('.hbs',expressHbs({
-  defaultLayout:'layout',
-  extname:'.hbs',
+app.engine('.hbs', expressHbs({
+  defaultLayout: 'layout',
+  extname: '.hbs',
   helpers: {
-    eq: function(a, b) {
+    eq(a, b) {
       return a === b;
     }
   },
@@ -44,16 +40,22 @@ app.engine('.hbs',expressHbs({
 app.set('view engine', '.hbs');
 
 // Security Middleware
-// 1. Helmet - Set security HTTP headers
+// 1. Helmet - Set security HTTP headers with MITM protection
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://stackpath.bootstrapcdn.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://stackpath.bootstrapcdn.com"],
-      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com", "data:"],
-      imgSrc: ["'self'", "data:", "https:"]
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://stackpath.bootstrapcdn.com', 'https://cdnjs.cloudflare.com', 'https://use.fontawesome.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'https://code.jquery.com', 'https://cdnjs.cloudflare.com', 'https://stackpath.bootstrapcdn.com'],
+      fontSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://use.fontawesome.com', 'data:'],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null // Upgrade HTTP to HTTPS in production
     }
+  },
+  hsts: {
+    maxAge: 31536000, // 1 year in seconds
+    includeSubDomains: true,
+    preload: true
   }
 }));
 
@@ -66,7 +68,7 @@ const loginLimiter = rateLimit({
   max: 5, // Limit each IP to 5 login requests per windowMs
   message: 'Too many login attempts from this IP, please try again after 15 minutes',
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 // 4. General API rate limiting
@@ -74,7 +76,7 @@ const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 app.use(logger('dev'));
@@ -85,46 +87,50 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Sessions with secure settings
 app.use(session({
-    secret: 'rockndogs-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true, // Prevents XSS attacks by making cookie inaccessible to JavaScript
-        secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
-        sameSite: 'strict', // Prevents CSRF attacks
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
+  secret: process.env.SESSION_SECRET || 'rockndogs-secret-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true, // Prevents XSS attacks by making cookie inaccessible to JavaScript
+    secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+    sameSite: 'strict', // Prevents CSRF attacks
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
 }));
 
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Expose auth/cart info to templates
-app.use(function(req, res, next) {
-    // Prevent caching of authenticated pages
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-    
-    res.locals.isAuthenticated = !!req.user;
-    res.locals.user = req.user;
-    res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
-    res.locals.year = new Date().getFullYear();
-    
-    // Debug logging
-    if (req.path.includes('/shop/') || req.path.includes('/product/')) {
-        console.log('Request path:', req.path);
-        console.log('isAuthenticated:', res.locals.isAuthenticated);
-        console.log('User:', req.user ? req.user.email : 'none');
-    }
-    
-    next();
-});
-/*app.use(expressLayouts);
-app.use(ejs);
-app.use(engine);*/
+// Trust proxy for HTTPS behind reverse proxy (nginx, heroku, etc.)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Trust first proxy
+}
 
+// Expose auth/cart info to templates
+app.use(function (req, res, next) {
+  // Prevent caching of authenticated pages
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+
+  res.locals.isAuthenticated = !!req.user;
+  res.locals.user = req.user;
+  res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
+  res.locals.year = new Date().getFullYear();
+
+  // Debug logging
+  if (req.path.includes('/shop/') || req.path.includes('/product/')) {
+    console.log('Request path:', req.path);
+    console.log('isAuthenticated:', res.locals.isAuthenticated);
+    console.log('User:', req.user ? req.user.email : 'none');
+  }
+
+  next();
+});
+/* app.use(expressLayouts);
+app.use(ejs);
+app.use(engine); */
 
 app.use('/', indexRouter);
 // Apply rate limiting to auth routes
@@ -137,30 +143,27 @@ app.use('/api', apiLimiter, require('./routes/api'));
 app.set('loginLimiter', loginLimiter);
 app.set('apiLimiter', apiLimiter);
 
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
 });
-
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    next(createError(404));
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
-
 // error handler
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 module.exports = app;

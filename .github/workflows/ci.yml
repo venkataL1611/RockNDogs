@@ -1,0 +1,129 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run ESLint
+      run: npm run lint
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:4.4
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.adminCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.14
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        options: >-
+          --health-cmd "curl -f http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run Unit Tests
+      run: npm run test:unit
+      env:
+        NODE_ENV: test
+        MONGODB_URI: mongodb://localhost:27017/shopping_test
+    
+    - name: Start Application
+      run: npm start &
+      env:
+        NODE_ENV: test
+        PORT: 3000
+    
+    - name: Wait for Application
+      run: npx wait-on http://localhost:3000 -t 30000
+    
+    - name: Run E2E Tests
+      run: npm run test:e2e
+      env:
+        TEST_URL: http://localhost:3000
+    
+    - name: Generate Coverage Report
+      run: npm run test:coverage
+    
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Run npm audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+    
+    - name: Run Snyk Security Scan
+      uses: snyk/actions/node@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

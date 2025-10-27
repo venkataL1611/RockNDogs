@@ -2,11 +2,11 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(async function(id, done) {
+passport.deserializeUser(async function (id, done) {
   try {
     const user = await User.findById(id).exec();
     done(null, user);
@@ -19,7 +19,7 @@ passport.use('local-signup', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true
-}, async function(req, email, password, done) {
+}, async function (req, email, password, done) {
   try {
     const existing = await User.findOne({ email: email.toLowerCase() }).exec();
     if (existing) {
@@ -40,7 +40,7 @@ passport.use('local-login', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true
-}, async function(req, email, password, done) {
+}, async function (req, email, password, done) {
   try {
     const user = await User.findOne({ email: email.toLowerCase() }).exec();
     if (!user) {

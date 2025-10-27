@@ -4,11 +4,11 @@ const Supply = require('../models/supply');
 
 // Product-specific descriptions
 const dogfoodDescriptions = {
-  'Pedigree': {
+  Pedigree: {
     short: 'Complete nutrition for adult dogs with chicken, rice and vegetables',
     long: 'Pedigree Adult Complete Nutrition provides 100% complete and balanced nutrition for adult dogs. Made with real chicken as the #1 ingredient, enriched with vitamins and minerals, and fortified with omega-6 fatty acids for healthy skin and coat. This formula includes whole grains, vegetables, and essential nutrients to support strong muscles, healthy digestion, and overall vitality. Perfect for dogs of all breeds and sizes.'
   },
-  'Victor': {
+  Victor: {
     short: 'High-protein formula for active dogs with real meat and grain-free nutrition',
     long: 'Victor Hi-Pro Plus is a nutrient-dense, multi-meat formula designed for active sporting dogs, working dogs, and growing puppies. Features 76% meat protein from beef, chicken, pork and fish meals. Grain-free recipe with sweet potatoes and peas for sustained energy. Enhanced with probiotics for digestive health, glucosamine for joint support, and selenium yeast for immune system function. Made in USA with premium ingredients.'
   },
@@ -24,7 +24,7 @@ const dogfoodDescriptions = {
     short: 'Ultra-premium grain-inclusive formula for all life stages',
     long: 'Victor Classic - The Family Dog is a multi-protein, grain-inclusive formula suitable for all life stages. Features beef meal, chicken meal, and pork meal as primary protein sources. Includes gluten-free grains for sustained energy. Fortified with vitamins and chelated minerals for optimal nutrient absorption. Contains selenium yeast and vitamin E for immune support. Ideal for families with multiple dogs of different ages and activity levels.'
   },
-  'Drools': {
+  Drools: {
     short: 'Complete balanced nutrition with chicken and rice for healthy growth',
     long: 'Drools Chicken & Rice Adult Dog Food provides complete and balanced nutrition for adult dogs. Made with high-quality chicken protein for lean muscle development. Enriched with omega fatty acids for healthy skin and shiny coat. Contains prebiotics and probiotics for digestive health. Fortified with essential vitamins and minerals. Includes calcium and phosphorus for strong bones and teeth. Free from artificial colors and flavors.'
   },
@@ -32,7 +32,7 @@ const dogfoodDescriptions = {
     short: 'Gentle formula for dogs with digestive sensitivities and food allergies',
     long: 'Gentle Nutrition Sensitive Stomach formula is specially designed for dogs with digestive sensitivities. Features easily digestible proteins and carbohydrates to minimize stomach upset. Contains prebiotic fiber to support digestive health and nutrient absorption. Enriched with natural sources of omega fatty acids for skin and coat health. Free from common allergens including corn, wheat, and soy. Veterinarian recommended for dogs with sensitive digestion.'
   },
-  'Wilderness': {
+  Wilderness: {
     short: 'Grain-free, high-protein recipe inspired by the ancestral diet of wolves',
     long: 'Blue Wilderness High Protein Natural Adult Dry Dog Food is inspired by the diet of wolves, featuring more of the meat dogs love. This grain-free recipe contains more protein than traditional Blue Buffalo formulas. Made with real deboned chicken as the first ingredient. Enhanced with LifeSource Bits - a precise blend of antioxidants, vitamins and minerals. Contains omega 3 & 6 fatty acids for healthy skin and coat. No chicken by-product meals, corn, wheat, soy, or artificial flavors.'
   },
@@ -48,14 +48,14 @@ const dogfoodDescriptions = {
     short: 'Special dog-safe cake mix for celebrating your pet special occasions',
     long: 'Puppy Cake Wheat-Free Cake Mix for Dogs makes it easy to celebrate special occasions with your furry friend. Made with dog-safe ingredients and naturally flavored. Simply add water, oil, and egg to create a delicious cake your dog will love. Wheat-free formula is gentle on sensitive stomachs. Perfect for birthdays, adoption days, or any special celebration. Comes with frosting mix for the complete party experience. Makes one 4-inch cake.'
   },
-  'IAMS': {
+  IAMS: {
     short: 'Complete nutrition with real chicken for healthy, active adult dogs',
     long: 'IAMS Proactive Health Adult MiniChunks provides complete and balanced nutrition tailored for adult dogs. Made with farm-raised chicken as the #1 ingredient. Features a specialized fiber blend including beet pulp and prebiotics for optimal digestive health. Enhanced with omega-6 fatty acids for nourished skin and lustrous coat. Fortified with antioxidants for a strong immune system. Crunchy kibble helps reduce plaque and tartar buildup. Veterinarian recommended.'
   }
 };
 
 const supplyDescriptions = {
-  'Bowl': {
+  Bowl: {
     short: 'Durable stainless steel food and water bowl for dogs',
     long: 'Premium Stainless Steel Dog Bowl is perfect for food and water. Made from high-quality, rust-resistant stainless steel that will not hold odors or bacteria. Dishwasher safe for easy cleaning. Non-skid rubber base prevents sliding and floor scratches. Available in multiple sizes to suit dogs of all breeds. Durable construction ensures years of use. Tip-resistant design prevents spills. Ideal for both indoor and outdoor use.'
   },
@@ -87,7 +87,7 @@ const supplyDescriptions = {
     short: 'Durable flying disc designed specifically for dogs',
     long: 'Indestructible Dog Frisbee is made from soft, flexible rubber that is gentle on teeth and gums. Floats in water for pool and beach play. Bright colors make it easy to spot in grass or sand. Aerodynamic design flies straight and far. Puncture-resistant material stands up to aggressive chewers. Easy to catch and retrieve. Perfect for fetch, exercise, and bonding. Multiple sizes available. Great for teaching new tricks and burning energy.'
   },
-  'Harness': {
+  Harness: {
     short: 'Everyday comfort harness for walks and outdoor adventures',
     long: 'All-Day Comfort Dog Harness features soft padding on chest and belly straps for irritation-free wear. Adjustable at four points for perfect fit. Quick-snap buckles make it easy to put on. Sturdy top handle for quick control in crowds or emergencies. Reflective stitching for visibility. Two leash attachment points - front for training, back for casual walks. Weather-resistant materials. Perfect for daily use, hiking, and training. Machine washable.'
   },
@@ -105,13 +105,13 @@ const supplyDescriptions = {
 setTimeout(async () => {
   try {
     console.log('Starting description updates...\n');
-    
+
     // Update dogfoods
     for (const [title, descriptions] of Object.entries(dogfoodDescriptions)) {
       const result = await DogFood.updateOne(
-        { title: title },
-        { 
-          $set: { 
+        { title },
+        {
+          $set: {
             shortDescription: descriptions.short,
             longDescription: descriptions.long,
             description: descriptions.short // Also update description field
@@ -120,15 +120,15 @@ setTimeout(async () => {
       );
       console.log(`Updated ${title}: matched=${result.matchedCount}, modified=${result.modifiedCount}`);
     }
-    
+
     console.log('\n');
-    
+
     // Update supplies
     for (const [title, descriptions] of Object.entries(supplyDescriptions)) {
       const result = await Supply.updateOne(
         { Title: title },
-        { 
-          $set: { 
+        {
+          $set: {
             shortDescription: descriptions.short,
             longDescription: descriptions.long,
             description: descriptions.short // Also update description field
@@ -137,9 +137,8 @@ setTimeout(async () => {
       );
       console.log(`Updated ${title}: matched=${result.matchedCount}, modified=${result.modifiedCount}`);
     }
-    
+
     console.log('\n✅ All descriptions updated successfully!');
-    
   } catch (err) {
     console.error('❌ Error updating descriptions:', err);
   } finally {

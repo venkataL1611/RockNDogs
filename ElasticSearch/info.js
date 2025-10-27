@@ -1,5 +1,5 @@
-var client=require('./connection');
+const client = require('./connection');
 
-client.cluster.health({},function(err,resp,next){
-    console.log("client health",resp);
-})
+client.cluster.health({}, function (err, resp, next) {
+  console.log('client health', resp);
+});

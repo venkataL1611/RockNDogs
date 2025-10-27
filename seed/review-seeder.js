@@ -74,16 +74,16 @@ setTimeout(async () => {
     // Generate reviews for each dogfood (3-8 reviews per product)
     for (const product of dogfoods) {
       const numReviews = 3 + Math.floor(Math.random() * 6); // 3-8 reviews
-      
+
       for (let i = 0; i < numReviews; i++) {
         const rating = getRandomRating();
         const template = getRandomElement(reviewTemplates[rating]);
-        
+
         reviews.push({
           productId: product._id,
           productType: 'dogfood',
           userName: getRandomElement(userNames),
-          rating: rating,
+          rating,
           reviewTitle: template.title,
           reviewText: template.text,
           helpful: Math.floor(Math.random() * 15),
@@ -100,16 +100,16 @@ setTimeout(async () => {
     // Generate reviews for each supply (3-8 reviews per product)
     for (const product of supplies) {
       const numReviews = 3 + Math.floor(Math.random() * 6);
-      
+
       for (let i = 0; i < numReviews; i++) {
         const rating = getRandomRating();
         const template = getRandomElement(reviewTemplates[rating]);
-        
+
         reviews.push({
           productId: product._id,
           productType: 'supply',
           userName: getRandomElement(userNames),
-          rating: rating,
+          rating,
           reviewTitle: template.title,
           reviewText: template.text,
           helpful: Math.floor(Math.random() * 15),
@@ -130,10 +130,9 @@ setTimeout(async () => {
     ]);
 
     console.log('\nReview Summary:');
-    summary.forEach(s => {
+    summary.forEach((s) => {
       console.log(`  ${s._id} stars: ${s.count} reviews`);
     });
-
   } catch (err) {
     console.error('❌ Error:', err);
   } finally {

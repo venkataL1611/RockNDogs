@@ -1,88 +1,82 @@
-var mocha=require('mocha');
-var assert=require('assert');
-var mongoose=require('mongoose');
+const mocha = require('mocha');
+const assert = require('assert');
+const mongoose = require('mongoose');
 
-var Supplies= require('../models/supply');
+const Supplies = require('../models/supply');
 
-var supplies = [new Supplies({
-            imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Bowl.jpg",
-            Title : "Bowl",
-            Price : "13"
-        }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538612/Images/41kGZSkgfcL._SL500_AC_SS350_.jpg",
-                Title : "Dog Bed",
-                Price : "25"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538452/Images/Dog_Bowl.jpg",
-                Title : "Dog Bowl",
-                Price : "14"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Harness.jpg",
-                Title : "Dog Harness",
-                Price : "21"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538660/Images/Round_Bowl.jpg",
-                Title : "Round Bowl",
-                Price : "31"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Large_Harness.jpg",
-                Title : "Large Harness",
-                Price : "19"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Net_Harness.jpg",
-                Title : "Net Harness",
-                Price : "24"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Frisbee.jpg",
-                Title : "Dog Frisbee",
-                Price : "34"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Harness.jpg",
-                Title : "Harness",
-                Price : "26"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Toy.jpg",
-                Title : "Dog Toy",
-                Price : "9"
-            }),
-            new Supplies({
-                imagepath : "https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Nerf_Dog.jpg",
-                Title : "Nerf Dog",
-            Price : "20"
-        })
-    ];
-    
-    var done = 0;
-    for(var k=0;k<supplies.length;k++)
-    {
-        supplies[k].save().then(function() {
-            assert(!supplies.isNew);
-            done++;
-            if(done === supplies.length) {
-                console.log('Dog supplies seeded successfully!');
-                mongoose.disconnect();
-            }
-        }).catch(function(err) {
-            console.error('Error seeding supplies:', err);
-            mongoose.disconnect();
-        });
+const supplies = [new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Bowl.jpg',
+  Title: 'Bowl',
+  Price: '13'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538612/Images/41kGZSkgfcL._SL500_AC_SS350_.jpg',
+  Title: 'Dog Bed',
+  Price: '25'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538452/Images/Dog_Bowl.jpg',
+  Title: 'Dog Bowl',
+  Price: '14'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Harness.jpg',
+  Title: 'Dog Harness',
+  Price: '21'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538660/Images/Round_Bowl.jpg',
+  Title: 'Round Bowl',
+  Price: '31'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Large_Harness.jpg',
+  Title: 'Large Harness',
+  Price: '19'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Net_Harness.jpg',
+  Title: 'Net Harness',
+  Price: '24'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Frisbee.jpg',
+  Title: 'Dog Frisbee',
+  Price: '34'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538655/Images/Harness.jpg',
+  Title: 'Harness',
+  Price: '26'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538654/Images/Dog_Toy.jpg',
+  Title: 'Dog Toy',
+  Price: '9'
+}),
+new Supplies({
+  imagepath: 'https://res.cloudinary.com/dcmgqkay2/image/upload/v1543538656/Images/Nerf_Dog.jpg',
+  Title: 'Nerf Dog',
+  Price: '20'
+})
+];
+
+let done = 0;
+for (let k = 0; k < supplies.length; k++) {
+  supplies[k].save().then(function () {
+    assert(!supplies.isNew);
+    done++;
+    if (done === supplies.length) {
+      console.log('Dog supplies seeded successfully!');
+      mongoose.disconnect();
     }
+  }).catch(function (err) {
+    console.error('Error seeding supplies:', err);
+    mongoose.disconnect();
+  });
+}
 
-
-
-
-
-
-/*var Products=require('../models/product');
+/* var Products=require('../models/product');
 
  describe('Saving Records',function(){
      this.timeout(500);
