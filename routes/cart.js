@@ -1,11 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
+const { trace } = require('@opentelemetry/api');
 const Cart = require('../lib/cart');
 const DogFood = require('../models/dogfood');
 const Supply = require('../models/supply');
 const Order = require('../models/order');
-const { trace } = require('@opentelemetry/api');
 
 const tracer = trace.getTracer('rockndogs-cart');
 
@@ -17,7 +17,7 @@ async function simulatePaymentGateway(paymentMethod, amount) {
       span.setAttributes({
         'payment.method': paymentMethod,
         'payment.amount': amount,
-        'payment.gateway': 'simulated',
+        'payment.gateway': 'simulated'
       });
 
       console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
@@ -36,7 +36,7 @@ async function simulatePaymentGateway(paymentMethod, amount) {
         console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
         span.setAttributes({
           'payment.status': 'failed',
-          'payment.error': 'declined',
+          'payment.error': 'declined'
         });
         span.recordException(new Error('Payment declined'));
         span.end();
@@ -52,7 +52,7 @@ async function simulatePaymentGateway(paymentMethod, amount) {
       console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
       span.setAttributes({
         'payment.status': 'success',
-        'payment.transaction_id': transactionId,
+        'payment.transaction_id': transactionId
       });
       span.end();
 

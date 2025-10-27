@@ -11,7 +11,7 @@ const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http')
 const jaegerEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://localhost:4318/v1/traces';
 const traceExporter = new OTLPTraceExporter({
   // Jaeger OTLP HTTP endpoint (default port 4318)
-  url: jaegerEndpoint,
+  url: jaegerEndpoint
 });
 
 // Initialize the OpenTelemetry SDK
@@ -23,26 +23,26 @@ const sdk = new NodeSDK({
       // Automatically instrument these libraries
       '@opentelemetry/instrumentation-http': {
         enabled: true,
-        ignoreIncomingPaths: ['/health', '/favicon.ico'],
+        ignoreIncomingPaths: ['/health', '/favicon.ico']
       },
       '@opentelemetry/instrumentation-express': {
-        enabled: true,
+        enabled: true
       },
       '@opentelemetry/instrumentation-mongodb': {
-        enabled: true,
+        enabled: true
       },
       '@opentelemetry/instrumentation-redis': {
-        enabled: true,
+        enabled: true
       },
       '@opentelemetry/instrumentation-mongoose': {
-        enabled: true,
+        enabled: true
       },
       // Disable instrumentations we don't use
       '@opentelemetry/instrumentation-fs': { enabled: false },
       '@opentelemetry/instrumentation-dns': { enabled: false },
-      '@opentelemetry/instrumentation-net': { enabled: false },
-    }),
-  ],
+      '@opentelemetry/instrumentation-net': { enabled: false }
+    })
+  ]
 });
 
 // Start the SDK (synchronous, no promise)
