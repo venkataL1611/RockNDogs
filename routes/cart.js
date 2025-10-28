@@ -93,9 +93,22 @@ router.get('/cart', ensureAuth, function (req, res) {
 router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
   const productId = req.params.id;
   const { type } = req.params;
+  console.log(`[CART] Adding ${type} with ID ${productId} to cart`);
+  // Idempotency guard: avoid double-add if same product is added twice within 1.2s
+  const now = Date.now();
+  const lastAdd = req.session.lastAdd || {};
+  if (lastAdd.productId === String(productId) && (now - (lastAdd.at || 0)) < 1200) {
+    console.log('[CART] Duplicate add detected within 1.2s, ignoring');
+    const refererDup = req.get('Referer') || `/product/${type}/${productId}`;
+    return res.redirect(refererDup);
+  }
+
   const cart = new Cart(req.session.cart ? req.session.cart : {});
+  console.log(`[CART] Current cart qty before add: ${cart.totalQty}`);
+
   try {
     let product;
+
     if (type === 'dogfood') {
       product = await DogFood.findById(productId).exec();
       if (!product) throw new Error('DogFood not found');
@@ -114,6 +127,9 @@ router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
       throw new Error('Invalid product type');
     }
     cart.add(product, product._id);
+    console.log(`[CART] Cart qty after add: ${cart.totalQty}`);
+    // Update lastAdd marker for idempotency protection
+    req.session.lastAdd = { productId: String(product._id), at: now };
     req.session.cart = cart;
     // Redirect back to the page they came from, or to the product detail page as fallback
     const referer = req.get('Referer') || `/product/${type}/${productId}`;
