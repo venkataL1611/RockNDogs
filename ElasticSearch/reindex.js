@@ -8,7 +8,7 @@ const client = require('./connection');
 const DogFood = require('../models/dogfood');
 const Supply = require('../models/supply');
 
-mongoose.connect('mongodb://localhost:27017/shopping');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping');
 
 async function reindexDogFoods() {
   console.log('🔄 Re-indexing dog foods...');
