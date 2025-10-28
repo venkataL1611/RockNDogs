@@ -8,6 +8,7 @@
     "test": "jest",
     "test:unit": "jest tests/unit",
     "test:e2e": "jest tests/e2e",
+    "test:e2e:local": "bash scripts/run-e2e-tests.sh",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
