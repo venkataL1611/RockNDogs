@@ -225,11 +225,17 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     
+    - name: Set lowercase repository owner
+      id: repo
+      run: echo "owner_lc=${OWNER,,}" >> $GITHUB_OUTPUT
+      env:
+        OWNER: ${{ github.repository_owner }}
+    
     - name: Extract metadata for Docker
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: ghcr.io/${{ github.repository_owner }}/rockndogs
+        images: ghcr.io/${{ steps.repo.outputs.owner_lc }}/rockndogs
         tags: |
           type=sha,prefix=,format=short
           type=raw,value=latest,enable={{is_default_branch}}
@@ -263,7 +269,8 @@ jobs:
     - name: Update deployment image tag
       run: |
         SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-        NEW_IMAGE="ghcr.io/${{ github.repository_owner }}/rockndogs:${SHORT_SHA}"
+        OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+        NEW_IMAGE="ghcr.io/${OWNER_LC}/rockndogs:${SHORT_SHA}"
         
         echo "Updating k8s/deployment.yaml to use image: ${NEW_IMAGE}"
         
