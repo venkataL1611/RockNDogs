@@ -12,7 +12,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky install",
-    "pretest": "chmod +x tests/setup.sh && tests/setup.sh"
+    "pretest": "chmod +x tests/setup.sh && tests/setup.sh",
+    "load:test": "autocannon -c 10 -d 30 http://localhost:3000",
+    "load:search": "autocannon -c 10 -d 20 http://localhost:3000/shop/search-result?q=food",
+    "load:products": "autocannon -c 5 -d 15 http://localhost:3000/product/dogfood"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.17.14",
@@ -51,6 +54,7 @@
   "description": "An Ecommerce Website",
   "main": "Web",
   "devDependencies": {
+    "autocannon": "^8.0.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.32.0",

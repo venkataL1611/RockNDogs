@@ -115,7 +115,9 @@ router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
     }
     cart.add(product, product._id);
     req.session.cart = cart;
-    res.redirect('back');
+    // Redirect back to the page they came from, or to the product detail page as fallback
+    const referer = req.get('Referer') || `/product/${type}/${productId}`;
+    res.redirect(referer);
   } catch (err) {
     console.error(err);
     res.redirect('/');
@@ -203,8 +205,52 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
     console.log('[TRACE] Creating order from cart');
     const cart = new Cart(req.session.cart);
     const {
-      fullName, address, city, state, zipCode, phone, paymentMethod
+      fullName, address, city, state, zipCode, phone, paymentMethod,
+      cardNumber, expiryDate, cvv
     } = req.body;
+
+    // Validate required fields
+    if (!fullName || !address || !city || !state || !zipCode || !phone) {
+      return res.status(400).render('cart/payment-failed', {
+        title: 'Checkout Failed',
+        message: 'Please fill in all required shipping information.'
+      });
+    }
+
+    // Validate payment information for card payments
+    if (paymentMethod !== 'paypal') {
+      if (!cardNumber || !expiryDate || !cvv) {
+        return res.status(400).render('cart/payment-failed', {
+          title: 'Payment Failed',
+          message: 'Please provide valid payment card information.'
+        });
+      }
+
+      // Basic card number validation (should be 13-19 digits)
+      const cleanCardNumber = cardNumber.replace(/\s/g, '');
+      if (!/^\d{13,19}$/.test(cleanCardNumber)) {
+        return res.status(400).render('cart/payment-failed', {
+          title: 'Payment Failed',
+          message: 'Invalid card number. Please check and try again.'
+        });
+      }
+
+      // Validate expiry date format (MM/YY)
+      if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+        return res.status(400).render('cart/payment-failed', {
+          title: 'Payment Failed',
+          message: 'Invalid expiry date format. Use MM/YY.'
+        });
+      }
+
+      // Validate CVV (3-4 digits)
+      if (!/^\d{3,4}$/.test(cvv)) {
+        return res.status(400).render('cart/payment-failed', {
+          title: 'Payment Failed',
+          message: 'Invalid CVV. Must be 3 or 4 digits.'
+        });
+      }
+    }
 
     // Calculate totals
     const subtotal = cart.totalPrice;

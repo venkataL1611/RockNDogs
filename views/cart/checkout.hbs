@@ -78,19 +78,19 @@
               </div>
               <div class="form-group">
                 <label>Card Number *</label>
-                <input type="text" class="form-control" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Expiry Date *</label>
-                    <input type="text" class="form-control" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                    <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>CVV *</label>
-                    <input type="text" class="form-control" name="cvv" placeholder="123" maxlength="4">
+                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
                   </div>
                 </div>
               </div>
@@ -153,6 +153,46 @@
 <script>
   // Form validation and submission handling
   document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    
+    // Validate card details if not using PayPal
+    if (paymentMethod !== 'paypal') {
+      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      const expiryDate = document.getElementById('expiryDate').value;
+      const cvv = document.getElementById('cvv').value;
+      
+      // Validate card number (13-19 digits)
+      if (!/^\d{13,19}$/.test(cardNumber)) {
+        e.preventDefault();
+        alert('Please enter a valid card number (13-19 digits)');
+        return false;
+      }
+      
+      // Validate expiry date (MM/YY format)
+      if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+        e.preventDefault();
+        alert('Please enter expiry date in MM/YY format');
+        return false;
+      }
+      
+      // Check if card is expired
+      const [month, year] = expiryDate.split('/');
+      const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+      const today = new Date();
+      if (expiry < today) {
+        e.preventDefault();
+        alert('This card has expired. Please use a valid card.');
+        return false;
+      }
+      
+      // Validate CVV (3-4 digits)
+      if (!/^\d{3,4}$/.test(cvv)) {
+        e.preventDefault();
+        alert('Please enter a valid CVV (3 or 4 digits)');
+        return false;
+      }
+    }
+    
     const btn = document.getElementById('place-order-btn');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
@@ -162,13 +202,35 @@
   document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
     radio.addEventListener('change', function() {
       const cardDetails = document.getElementById('card-details');
+      const cardInputs = cardDetails.querySelectorAll('input');
       if (this.value === 'paypal') {
         cardDetails.style.display = 'none';
-        cardDetails.querySelectorAll('input').forEach(input => input.required = false);
+        cardInputs.forEach(input => input.required = false);
       } else {
         cardDetails.style.display = 'block';
-        cardDetails.querySelectorAll('input').forEach(input => input.required = true);
+        cardInputs.forEach(input => input.required = true);
       }
     });
+  });
+  
+  // Auto-format card number with spaces
+  document.getElementById('cardNumber').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\s/g, '');
+    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+    e.target.value = formattedValue;
+  });
+  
+  // Auto-format expiry date with slash
+  document.getElementById('expiryDate').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    e.target.value = value;
+  });
+  
+  // Only allow numbers in CVV
+  document.getElementById('cvv').addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/\D/g, '');
   });
 </script>
