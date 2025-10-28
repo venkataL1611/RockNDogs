@@ -25,6 +25,7 @@ logs/
 # IDEs
 .vscode/
 .idea/
+*.iml
 
 # OS files
 Thumbs.db

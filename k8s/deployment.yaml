@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocknDogs-app
+  namespace: rocknDogs
+  labels:
+    app: rocknDogs
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: rocknDogs
+  template:
+    metadata:
+      labels:
+        app: rocknDogs
+        version: v1
+    spec:
+      containers:
+      - name: rockndogs
+        image: rockndogs:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: rocknDogs-secrets
+              key: SESSION_SECRET
+        envFrom:
+        - configMapRef:
+            name: rocknDogs-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rockndogs-service
+  namespace: rocknDogs
+spec:
+  type: NodePort  # Changed from LoadBalancer for minikube
+  selector:
+    app: rocknDogs
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
