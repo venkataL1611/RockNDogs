@@ -33,11 +33,15 @@ const DogFoodSchema = new Schema({
 });
 
 const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+console.log('🔍 DogFood model - ELASTICSEARCH_URL env var:', process.env.ELASTICSEARCH_URL);
+console.log('🔍 DogFood model - Using Elasticsearch URL:', esUrl);
 const esUrlParts = new URL(esUrl);
-DogFoodSchema.plugin(mongoosastic, {
+const esConfig = {
   host: esUrlParts.hostname,
   port: esUrlParts.port || '9200',
   protocol: esUrlParts.protocol.replace(':', '')
-});
+};
+console.log('🔍 DogFood model - Elasticsearch config:', JSON.stringify(esConfig));
+DogFoodSchema.plugin(mongoosastic, esConfig);
 
 module.exports = mongoose.model('DogFood', DogFoodSchema);
