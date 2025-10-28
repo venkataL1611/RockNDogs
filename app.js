@@ -18,7 +18,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const indexRouter = require('./routes/index');
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/shopping');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping');
 
 // view engine setup
 app.engine('.hbs', expressHbs({
