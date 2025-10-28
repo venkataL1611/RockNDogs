@@ -16,10 +16,9 @@ const CategorySchema = new mongoose.Schema({
 });
 
 const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
-const elasticsearch = require('elasticsearch');
-const esClient = new elasticsearch.Client({
-  host: esUrl,
-  log: 'error'
+const { Client } = require('@elastic/elasticsearch');
+const esClient = new Client({
+  node: esUrl
 });
 
 CategorySchema.plugin(mongoosastic, {

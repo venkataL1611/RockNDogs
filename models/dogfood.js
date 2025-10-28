@@ -37,12 +37,11 @@ console.log('🔍 DogFood model - ELASTICSEARCH_URL env var:', process.env.ELAST
 console.log('🔍 DogFood model - Using Elasticsearch URL:', esUrl);
 
 // Create Elasticsearch client and pass it to mongoosastic
-const elasticsearch = require('elasticsearch');
-const esClient = new elasticsearch.Client({
-  host: esUrl,
-  log: 'error'
+const { Client } = require('@elastic/elasticsearch');
+const esClient = new Client({
+  node: esUrl
 });
-console.log('🔍 DogFood model - Created ES client with host:', esUrl);
+console.log('🔍 DogFood model - Created ES client with node:', esUrl);
 
 DogFoodSchema.plugin(mongoosastic, {
   esClient: esClient
