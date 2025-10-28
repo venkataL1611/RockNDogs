@@ -95,14 +95,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Sessions with secure settings
+// Allow override via SESSION_SECURE env (useful for minikube HTTP port-forward)
+const sessionSecure = process.env.SESSION_SECURE === 'true' || (process.env.SESSION_SECURE === undefined && process.env.NODE_ENV === 'production');
+const sessionSameSite = process.env.SESSION_SAME_SITE || 'strict';
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'rockndogs-secret-change-in-production',
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true, // Prevents XSS attacks by making cookie inaccessible to JavaScript
-    secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
-    sameSite: 'strict', // Prevents CSRF attacks
+    secure: sessionSecure, // Only send cookie over HTTPS in production (override with SESSION_SECURE=false)
+    sameSite: sessionSameSite, // Prevents CSRF attacks
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));

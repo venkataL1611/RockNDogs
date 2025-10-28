@@ -10,3 +10,6 @@ data:
   ELASTICSEARCH_URL: "http://elasticsearch:9200"
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
+  # Disable secure cookies for HTTP port-forward access (minikube/local testing)
+  SESSION_SECURE: "false"
+  SESSION_SAME_SITE: "lax"
