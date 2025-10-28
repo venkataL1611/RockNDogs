@@ -16,12 +16,13 @@ const SuppliesSchema = new Schema({
 
 const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
 const { Client } = require('@elastic/elasticsearch');
+
 const esClient = new Client({
   node: esUrl
 });
 
 SuppliesSchema.plugin(mongoosastic, {
-  esClient: esClient
+  esClient
 });
 
 const supplies = mongoose.model('Supplies', SuppliesSchema);

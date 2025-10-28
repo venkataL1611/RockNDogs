@@ -12,23 +12,23 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping'
 
 async function reindexDogFoods() {
   console.log('🔄 Re-indexing dog foods...');
-  
+
   try {
     // Delete existing index
     await client.indices.delete({ index: 'dogfoods' }).catch(() => {
       console.log('No existing dogfoods index to delete');
     });
-    
+
     // Create new index
     await client.indices.create({ index: 'dogfoods' });
     console.log('✅ Created dogfoods index');
-    
+
     // Get all dog foods from MongoDB
     const dogfoods = await DogFood.find().lean().exec();
     console.log(`Found ${dogfoods.length} dog foods in MongoDB`);
-    
-    // Index each document
-    for (const dog of dogfoods) {
+
+    // Index each document using Promise.all for better performance
+    await Promise.all(dogfoods.map(async (dog) => {
       await client.index({
         index: 'dogfoods',
         id: dog._id.toString(), // Use MongoDB _id as ES _id
@@ -40,8 +40,9 @@ async function reindexDogFoods() {
         }
       });
       console.log(`  ✓ Indexed: ${dog.title} (${dog._id})`);
-    }
-    
+      return dog;
+    }));
+
     // Refresh index to make documents searchable
     await client.indices.refresh({ index: 'dogfoods' });
     console.log('✅ Dog foods re-indexed successfully');
@@ -52,23 +53,23 @@ async function reindexDogFoods() {
 
 async function reindexSupplies() {
   console.log('🔄 Re-indexing supplies...');
-  
+
   try {
     // Delete existing index
     await client.indices.delete({ index: 'supplies' }).catch(() => {
       console.log('No existing supplies index to delete');
     });
-    
+
     // Create new index
     await client.indices.create({ index: 'supplies' });
     console.log('✅ Created supplies index');
-    
+
     // Get all supplies from MongoDB
     const supplies = await Supply.find().lean().exec();
     console.log(`Found ${supplies.length} supplies in MongoDB`);
-    
-    // Index each document
-    for (const supply of supplies) {
+
+    // Index each document using Promise.all for better performance
+    await Promise.all(supplies.map(async (supply) => {
       await client.index({
         index: 'supplies',
         id: supply._id.toString(), // Use MongoDB _id as ES _id
@@ -80,8 +81,9 @@ async function reindexSupplies() {
         }
       });
       console.log(`  ✓ Indexed: ${supply.Title} (${supply._id})`);
-    }
-    
+      return supply;
+    }));
+
     // Refresh index to make documents searchable
     await client.indices.refresh({ index: 'supplies' });
     console.log('✅ Supplies re-indexed successfully');
@@ -92,11 +94,11 @@ async function reindexSupplies() {
 
 async function main() {
   console.log('🚀 Starting Elasticsearch re-indexing...\n');
-  
+
   await reindexDogFoods();
   console.log('');
   await reindexSupplies();
-  
+
   console.log('\n✨ Re-indexing complete!');
   process.exit(0);
 }

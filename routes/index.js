@@ -9,7 +9,7 @@ const client = require('../ElasticSearch/connection');
 
 const redisClient = redis.createClient({
   host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379,
+  port: process.env.REDIS_PORT || 6379
 });
 
 const getAsync = promisify(redisClient.get).bind(redisClient);
