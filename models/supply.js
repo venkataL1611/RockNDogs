@@ -4,13 +4,6 @@ const mongoosastic = require('mongoosastic');
 // Define Schema
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://localhost:27017/shopping', { useNewUrlParser: true });
-mongoose.connection.once('open', function () {
-  console.log('Connection has been made');
-}).on('error', function (error) {
-  console.log('Connection error', error);
-});
-
 // Create a Schema and a Model
 const SuppliesSchema = new Schema({
   imagepath: { type: String, es_type: 'text' },
@@ -21,7 +14,11 @@ const SuppliesSchema = new Schema({
   Price: { type: String, es_type: 'text' }
 });
 
-SuppliesSchema.plugin(mongoosastic);
+const esHost = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+SuppliesSchema.plugin(mongoosastic, {
+  host: esHost.replace('http://', '').split(':')[0],
+  port: esHost.includes(':') ? esHost.split(':')[2] || '9200' : '9200'
+});
 
 const supplies = mongoose.model('Supplies', SuppliesSchema);
 
