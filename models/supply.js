@@ -14,10 +14,12 @@ const SuppliesSchema = new Schema({
   Price: { type: String, es_type: 'text' }
 });
 
-const esHost = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+const esUrlParts = new URL(esUrl);
 SuppliesSchema.plugin(mongoosastic, {
-  host: esHost.replace('http://', '').split(':')[0],
-  port: esHost.includes(':') ? esHost.split(':')[2] || '9200' : '9200'
+  host: esUrlParts.hostname,
+  port: esUrlParts.port || '9200',
+  protocol: esUrlParts.protocol.replace(':', '')
 });
 
 const supplies = mongoose.model('Supplies', SuppliesSchema);

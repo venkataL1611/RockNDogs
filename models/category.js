@@ -15,10 +15,12 @@ const CategorySchema = new mongoose.Schema({
 
 });
 
-const esHost = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+const esUrlParts = new URL(esUrl);
 CategorySchema.plugin(mongoosastic, {
-  host: esHost.replace('http://', '').split(':')[0],
-  port: esHost.includes(':') ? esHost.split(':')[2] || '9200' : '9200'
+  host: esUrlParts.hostname,
+  port: esUrlParts.port || '9200',
+  protocol: esUrlParts.protocol.replace(':', '')
 });
 
 module.exports = mongoose.model('Category', CategorySchema);
