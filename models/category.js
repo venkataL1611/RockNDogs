@@ -16,11 +16,14 @@ const CategorySchema = new mongoose.Schema({
 });
 
 const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
-const esUrlParts = new URL(esUrl);
+const elasticsearch = require('elasticsearch');
+const esClient = new elasticsearch.Client({
+  host: esUrl,
+  log: 'error'
+});
+
 CategorySchema.plugin(mongoosastic, {
-  host: esUrlParts.hostname,
-  port: esUrlParts.port || '9200',
-  protocol: esUrlParts.protocol.replace(':', '')
+  esClient: esClient
 });
 
 module.exports = mongoose.model('Category', CategorySchema);

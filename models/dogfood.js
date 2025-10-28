@@ -35,13 +35,17 @@ const DogFoodSchema = new Schema({
 const esUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
 console.log('🔍 DogFood model - ELASTICSEARCH_URL env var:', process.env.ELASTICSEARCH_URL);
 console.log('🔍 DogFood model - Using Elasticsearch URL:', esUrl);
-const esUrlParts = new URL(esUrl);
-const esConfig = {
-  host: esUrlParts.hostname,
-  port: esUrlParts.port || '9200',
-  protocol: esUrlParts.protocol.replace(':', '')
-};
-console.log('🔍 DogFood model - Elasticsearch config:', JSON.stringify(esConfig));
-DogFoodSchema.plugin(mongoosastic, esConfig);
+
+// Create Elasticsearch client and pass it to mongoosastic
+const elasticsearch = require('elasticsearch');
+const esClient = new elasticsearch.Client({
+  host: esUrl,
+  log: 'error'
+});
+console.log('🔍 DogFood model - Created ES client with host:', esUrl);
+
+DogFoodSchema.plugin(mongoosastic, {
+  esClient: esClient
+});
 
 module.exports = mongoose.model('DogFood', DogFoodSchema);
