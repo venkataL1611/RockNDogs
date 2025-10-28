@@ -67,7 +67,7 @@ metadata:
   name: rockndogs-service
   namespace: rockndogs
 spec:
-  type: NodePort  # Changed from LoadBalancer for minikube
+  type: LoadBalancer
   selector:
     app: rockndogs
   ports:
