@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Category = require('../models/category');
 
-mongoose.connect('mongodb://localhost:27017/shopping', { useNewUrlParser: true });
+const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping';
+mongoose.connect(uri, { useNewUrlParser: true });
 
 setTimeout(async () => {
   try {

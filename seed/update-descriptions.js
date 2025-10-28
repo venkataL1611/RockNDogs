@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const DogFood = require('../models/dogfood');
 const Supplies = require('../models/supply');
 
-mongoose.connect('mongodb://localhost:27017/shopping', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping', { useNewUrlParser: true });
 
 // Detailed descriptions for dog food products
 const dogfoodDescriptions = {

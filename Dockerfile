@@ -8,14 +8,12 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies (including dev for any build steps)
-RUN npm ci
+# Install only production dependencies (skip dev deps like jest, eslint, etc.)
+# Use --ignore-scripts to skip husky install which is only needed for local dev
+RUN npm ci --only=production --ignore-scripts
 
 # Copy application code
 COPY . .
-
-# Remove dev dependencies for production
-RUN npm prune --production
 
 # Stage 2: Production stage
 FROM node:18-alpine

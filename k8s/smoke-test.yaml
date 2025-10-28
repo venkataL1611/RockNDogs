@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rockndogs-smoke-test
+  namespace: rockndogs
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: smoke
+          image: curlimages/curl:8.12.1
+          command: ["/bin/sh","-lc"]
+          args:
+            - |
+              set -euo pipefail
+              echo "🚦 Starting smoke tests..."
+              BASE="http://rockndogs-service.rockndogs.svc.cluster.local"
+
+              echo "GET /home"
+              curl -fsS "$BASE/home" >/dev/null
+
+              echo "GET /shop/dogfoods"
+              curl -fsS "$BASE/shop/dogfoods" >/dev/null
+
+              echo "Search for 'victor'"
+              curl -fsS "$BASE/shop/search-result?q=victor" | grep -qi victor
+
+              # Signup a unique user (ignore failure if already exists)
+              TS="$(date +%s)"
+              EMAIL="smoke-$TS@rockndogs.com"
+              echo "Signup user $EMAIL"
+              curl -fsS -c /tmp/c.jar -b /tmp/c.jar -L \
+                -X POST "$BASE/signup" \
+                -H 'Content-Type: application/x-www-form-urlencoded' \
+                --data "email=$EMAIL&password=smokepass&name=Smoke User" || true
+
+              # Attempt login
+              echo "Login with $EMAIL"
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -c /tmp/c.jar -b /tmp/c.jar -L \
+                -X POST "$BASE/login" \
+                -H 'Content-Type: application/x-www-form-urlencoded' \
+                --data "email=$EMAIL&password=smokepass")
+              echo "Login status: $STATUS"
+              echo "$STATUS" | grep -qE "200|302"
+
+              echo "🟢 Smoke tests passed"

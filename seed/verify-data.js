@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/shopping', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping', { useNewUrlParser: true });
 
 mongoose.connection.once('open', async function () {
   console.log('Connected to MongoDB - shopping database\n');

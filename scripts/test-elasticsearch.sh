@@ -7,7 +7,16 @@ echo ""
 
 # Test 1: Check Elasticsearch is running
 echo "1. Checking Elasticsearch connection..."
-ES_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9200/)
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Allow overriding ES endpoint (defaults to localhost)
+ES_URL=${ELASTICSEARCH_URL:-http://localhost:9200}
+
+echo "Using Elasticsearch at: $ES_URL"
+
+ES_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$ES_URL/")
 if [ "$ES_STATUS" = "200" ]; then
     echo "   ✓ Elasticsearch is running on port 9200"
 else
@@ -18,14 +27,14 @@ echo ""
 
 # Test 2: List indices
 echo "2. Elasticsearch Indices:"
-curl -s -X GET "localhost:9200/_cat/indices?v" | grep -E "index|dogfoods|canines|supplies"
+curl -s -X GET "$ES_URL/_cat/indices?v" | grep -E "index|dogfoods|canines|supplies"
 echo ""
 
 # Test 3: Count documents in dogfoods index
 echo "3. Document counts:"
-DOGFOOD_COUNT=$(curl -s -X GET "localhost:9200/dogfoods/_count" | grep -o '"count":[0-9]*' | cut -d':' -f2)
+DOGFOOD_COUNT=$(curl -s -X GET "$ES_URL/dogfoods/_count" | grep -o '"count":[0-9]*' | cut -d':' -f2)
 echo "   Dogfoods: $DOGFOOD_COUNT documents"
-CANINES_COUNT=$(curl -s -X GET "localhost:9200/canines/_count" | grep -o '"count":[0-9]*' | cut -d':' -f2)
+CANINES_COUNT=$(curl -s -X GET "$ES_URL/canines/_count" | grep -o '"count":[0-9]*' | cut -d':' -f2)
 echo "   Canines: $CANINES_COUNT documents"
 echo ""
 
@@ -61,7 +70,7 @@ echo ""
 
 # Test 5: Direct Elasticsearch query
 echo "5. Direct Elasticsearch query test:"
-DIRECT_SEARCH=$(curl -s -X GET "localhost:9200/dogfoods/_search?q=title:pedigree" | grep -o '"title":"[^"]*"' | head -3)
+DIRECT_SEARCH=$(curl -s -X GET "$ES_URL/dogfoods/_search?q=title:pedigree" | grep -o '"title":"[^"]*"' | head -3)
 if [ ! -z "$DIRECT_SEARCH" ]; then
     echo "   ✓ Direct Elasticsearch query working"
     echo "   Sample results: $DIRECT_SEARCH"
