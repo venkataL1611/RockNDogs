@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: rockndogs
-        image: rockndogs:latest
+        image: rockndogs:v7
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
