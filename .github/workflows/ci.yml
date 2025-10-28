@@ -101,6 +101,10 @@ jobs:
       env:
         NODE_ENV: test
         PORT: 3000
+        MONGODB_URI: mongodb://localhost:27017/shopping_test
+        ELASTICSEARCH_URL: http://localhost:9200
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
     
     - name: Wait for Application
       run: npx wait-on http://localhost:3000 -t 30000
@@ -109,6 +113,7 @@ jobs:
       run: npm run test:e2e
       env:
         TEST_URL: http://localhost:3000
+        NODE_ENV: test
     
     - name: Generate Coverage Report
       run: npm run test:coverage
