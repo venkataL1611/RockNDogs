@@ -38,13 +38,14 @@ console.log('🔍 DogFood model - Using Elasticsearch URL:', esUrl);
 
 // Create Elasticsearch client and pass it to mongoosastic
 const { Client } = require('@elastic/elasticsearch');
+
 const esClient = new Client({
   node: esUrl
 });
 console.log('🔍 DogFood model - Created ES client with node:', esUrl);
 
 DogFoodSchema.plugin(mongoosastic, {
-  esClient: esClient
+  esClient
 });
 
 module.exports = mongoose.model('DogFood', DogFoodSchema);

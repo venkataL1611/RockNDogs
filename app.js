@@ -96,7 +96,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Sessions with secure settings
 // Allow override via SESSION_SECURE env (useful for minikube HTTP port-forward)
-const sessionSecure = process.env.SESSION_SECURE === 'true' || (process.env.SESSION_SECURE === undefined && process.env.NODE_ENV === 'production');
+const sessionSecure = process.env.SESSION_SECURE === 'true'
+  || (process.env.SESSION_SECURE === undefined && process.env.NODE_ENV === 'production');
 const sessionSameSite = process.env.SESSION_SAME_SITE || 'strict';
 
 app.use(session({
