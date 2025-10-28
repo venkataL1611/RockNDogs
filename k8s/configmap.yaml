@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rocknDogs-config
+  name: rockndogs-config
   namespace: rockndogs
 data:
   NODE_ENV: "production"

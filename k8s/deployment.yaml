@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rocknDogs-app
+  name: rockndogs-app
   namespace: rockndogs
   labels:
-    app: rocknDogs
+    app: rockndogs
 spec:
   replicas: 2
   strategy:
@@ -14,11 +14,11 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: rocknDogs
+      app: rockndogs
   template:
     metadata:
       labels:
-        app: rocknDogs
+        app: rockndogs
         version: v1
     spec:
       containers:
@@ -32,11 +32,11 @@ spec:
         - name: SESSION_SECRET
           valueFrom:
             secretKeyRef:
-              name: rocknDogs-secrets
+              name: rockndogs-secrets
               key: SESSION_SECRET
         envFrom:
         - configMapRef:
-            name: rocknDogs-config
+            name: rockndogs-config
         resources:
           requests:
             memory: "256Mi"
@@ -69,7 +69,7 @@ metadata:
 spec:
   type: NodePort  # Changed from LoadBalancer for minikube
   selector:
-    app: rocknDogs
+    app: rockndogs
   ports:
   - port: 80
     targetPort: 3000
