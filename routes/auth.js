@@ -17,7 +17,7 @@ const loginLimiter = rateLimit({
 
 function ensureGuest(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log('User already authenticated, redirecting to home');
+    req.log.info({ user: req.user && req.user.email }, 'Already authenticated, redirecting to home');
     return res.redirect('/');
   }
   return next();
@@ -53,7 +53,7 @@ router.post(
     passport.authenticate('local-login', function (authErr, user, info) {
       if (authErr) return next(authErr);
       if (!user) {
-        console.log('Login failed - no user');
+        req.log.warn({ email: req.body.email }, 'Login failed - no user');
         return res.render('auth/login', {
           title: 'Login',
           message: info && info.message ? info.message : 'Invalid email or password'
@@ -62,18 +62,16 @@ router.post(
 
       req.logIn(user, function (loginErr) {
         if (loginErr) {
-          console.log('logIn error:', loginErr);
+          req.log.error({ err: loginErr }, 'Login error');
           return next(loginErr);
         }
 
-        console.log('User logged in successfully:', user.email);
-        console.log('Session ID:', req.sessionID);
-        console.log('isAuthenticated:', req.isAuthenticated());
+        req.log.info({ email: user.email, sessionId: req.sessionID, isAuthenticated: req.isAuthenticated() }, 'User logged in');
 
         // Redirect to returnTo URL if it exists, otherwise go to home
         const returnTo = req.session.returnTo || '/';
         delete req.session.returnTo;
-        console.log('Redirecting to:', returnTo);
+        req.log.debug({ returnTo }, 'Redirecting after login');
         return res.redirect(returnTo);
       });
     })(req, res, next);
@@ -99,29 +97,29 @@ router.post(
 
 // GET logout - simplified version
 router.get('/logout', function (req, res) {
-  console.log('Logout route hit, user:', req.user ? req.user.email : 'none');
+  req.log.info({ user: req.user ? req.user.email : 'none' }, 'Logout route hit');
 
   // Simple logout without callback (older passport versions)
   try {
     req.logout();
-    console.log('req.logout() called');
+    req.log.debug('req.logout() called');
   } catch (e) {
-    console.error('Logout error:', e);
+    req.log.error({ err: e }, 'Logout error');
   }
 
   // Destroy session
   if (req.session) {
     req.session.destroy(function (err) {
       if (err) {
-        console.error('Session destroy error:', err);
+        req.log.error({ err }, 'Session destroy error');
       }
-      console.log('Session destroyed');
+      req.log.debug('Session destroyed');
     });
   }
 
   // Clear cookie
   res.clearCookie('connect.sid', { path: '/' });
-  console.log('Cookie cleared, redirecting to home');
+  req.log.debug('Cookie cleared, redirecting to home');
 
   // Redirect immediately
   res.redirect('/home');
@@ -135,13 +133,13 @@ router.post('/logout', function (req, res, next) {
 
   req.logout(function (err) {
     if (err) {
-      console.error('Logout error:', err);
+      req.log.error({ err }, 'Logout error');
       return res.json({ success: false, error: 'Logout failed' });
     }
 
     req.session.destroy(function (destroyErr) {
       if (destroyErr) {
-        console.error('Session destroy error:', destroyErr);
+        req.log.error({ err: destroyErr }, 'Session destroy error');
       }
       res.clearCookie('connect.sid', { path: '/' });
       res.json({ success: true, redirect: '/home' });

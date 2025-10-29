@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { trace } = require('@opentelemetry/api');
+const { log } = require('../lib/logger');
 const Cart = require('../lib/cart');
 const DogFood = require('../models/dogfood');
 const Supply = require('../models/supply');
@@ -20,7 +21,7 @@ async function simulatePaymentGateway(paymentMethod, amount) {
         'payment.gateway': 'simulated'
       });
 
-      console.log('[PAYMENT_GATEWAY] Processing payment:', paymentMethod, amount);
+      log.info({ paymentMethod, amount }, '[PAYMENT_GATEWAY] Processing payment');
 
       // Simulate network delay
       await new Promise((resolve) => {
@@ -29,11 +30,11 @@ async function simulatePaymentGateway(paymentMethod, amount) {
 
       // Generate random number for testing
       const random = Math.random();
-      console.log('[PAYMENT_GATEWAY] Random value:', random, '(fail if < 0.05)');
+      log.debug({ random }, '[PAYMENT_GATEWAY] Random value (fail if < 0.05)');
 
       // Simulate random failures (5% chance - reduced for better testing)
       if (random < 0.05) {
-        console.log('[PAYMENT_GATEWAY] ❌ Payment declined');
+        log.warn('[PAYMENT_GATEWAY] Payment declined');
         span.setAttributes({
           'payment.status': 'failed',
           'payment.error': 'declined'
@@ -49,7 +50,7 @@ async function simulatePaymentGateway(paymentMethod, amount) {
       // Generate transaction ID
       const transactionId = `TXN${Date.now()}${Math.floor(Math.random() * 10000)}`;
 
-      console.log('[PAYMENT_GATEWAY] ✅ Payment successful:', transactionId);
+      log.info({ transactionId }, '[PAYMENT_GATEWAY] Payment successful');
       span.setAttributes({
         'payment.status': 'success',
         'payment.transaction_id': transactionId
@@ -93,18 +94,18 @@ router.get('/cart', ensureAuth, function (req, res) {
 router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
   const productId = req.params.id;
   const { type } = req.params;
-  console.log(`[CART] Adding ${type} with ID ${productId} to cart`);
+  req.log.info({ type, productId }, 'Cart add');
   // Idempotency guard: avoid double-add if same product is added twice within 1.2s
   const now = Date.now();
   const lastAdd = req.session.lastAdd || {};
   if (lastAdd.productId === String(productId) && (now - (lastAdd.at || 0)) < 1200) {
-    console.log('[CART] Duplicate add detected within 1.2s, ignoring');
+    req.log.warn({ productId }, 'Duplicate add detected within 1.2s, ignoring');
     const refererDup = req.get('Referer') || `/product/${type}/${productId}`;
     return res.redirect(refererDup);
   }
 
   const cart = new Cart(req.session.cart ? req.session.cart : {});
-  console.log(`[CART] Current cart qty before add: ${cart.totalQty}`);
+  req.log.debug({ totalQty: cart.totalQty }, 'Cart qty before add');
 
   try {
     let product;
@@ -127,7 +128,7 @@ router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
       throw new Error('Invalid product type');
     }
     cart.add(product, product._id);
-    console.log(`[CART] Cart qty after add: ${cart.totalQty}`);
+    req.log.debug({ totalQty: cart.totalQty }, 'Cart qty after add');
     // Update lastAdd marker for idempotency protection
     req.session.lastAdd = { productId: String(product._id), at: now };
     req.session.cart = cart;
@@ -135,7 +136,7 @@ router.get('/cart/add/:type/:id', ensureAuth, async function (req, res) {
     const referer = req.get('Referer') || `/product/${type}/${productId}`;
     res.redirect(referer);
   } catch (err) {
-    console.error(err);
+    req.log.error({ err }, 'Cart add error');
     res.redirect('/');
   }
 });
@@ -210,7 +211,7 @@ router.get('/checkout', ensureAuth, function (req, res) {
 
 // Process checkout - Dummy payment gateway
 router.post('/checkout/process', ensureAuth, async function (req, res) {
-  console.log('[TRACE] Checkout process started');
+  req.log.info('[TRACE] Checkout process started');
   const startTime = Date.now();
 
   if (!req.session.cart || !req.session.cart.totalQty) {
@@ -218,7 +219,7 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
   }
 
   try {
-    console.log('[TRACE] Creating order from cart');
+    req.log.debug('[TRACE] Creating order from cart');
     const cart = new Cart(req.session.cart);
     const {
       fullName, address, city, state, zipCode, phone, paymentMethod,
@@ -284,9 +285,9 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
     }));
 
     // Simulate payment processing
-    console.log('[TRACE] Processing payment via', paymentMethod);
+    req.log.info({ paymentMethod }, '[TRACE] Processing payment');
     const paymentResult = await simulatePaymentGateway(paymentMethod, total);
-    console.log('[TRACE] Payment result:', paymentResult.status);
+    req.log.info({ status: paymentResult.status }, '[TRACE] Payment result');
 
     if (paymentResult.status === 'failed') {
       return res.render('cart/payment-failed', {
@@ -296,7 +297,7 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
     }
 
     // Create order
-    console.log('[TRACE] Creating order in database');
+    req.log.debug('[TRACE] Creating order in database');
     const orderNumber = `ORD${Date.now()}${Math.floor(Math.random() * 10000)}`;
     const order = new Order({
       orderNumber,
@@ -319,18 +320,18 @@ router.post('/checkout/process', ensureAuth, async function (req, res) {
     });
 
     await order.save();
-    console.log('[TRACE] Order saved:', order.orderNumber);
+    req.log.info({ orderNumber: order.orderNumber }, '[TRACE] Order saved');
 
     // Clear cart
     req.session.cart = null;
 
     const duration = Date.now() - startTime;
-    console.log('[TRACE] Checkout process completed in', duration, 'ms');
+    req.log.info({ duration }, '[TRACE] Checkout process completed');
 
     // Redirect to confirmation page
     res.redirect(`/order/confirmation/${order.orderNumber}`);
   } catch (err) {
-    console.error('[TRACE] Checkout error:', err);
+    req.log.error({ err }, '[TRACE] Checkout error');
     res.render('cart/payment-failed', {
       title: 'Order Failed',
       message: 'An error occurred while processing your order. Please try again.'
@@ -354,7 +355,7 @@ router.get('/order/confirmation/:orderNumber', async function (req, res) {
       order
     });
   } catch (err) {
-    console.error('Error fetching order:', err);
+    req.log.error({ err }, 'Error fetching order');
     res.status(500).render('error', { message: 'Error loading order' });
   }
 });

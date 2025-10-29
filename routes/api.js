@@ -78,9 +78,10 @@ router.get('/search', async function (req, res) {
 
     // Combine and return results
     const combinedResults = [...dogfoodData, ...supplyData];
+    req.log.info({ q, count: combinedResults.length }, 'Search results');
     res.json({ results: combinedResults });
   } catch (err) {
-    console.error('Search error', err);
+    req.log.error({ err, q }, 'Search error');
     res.status(500).json({ error: 'search_failed' });
   }
 });
@@ -115,7 +116,7 @@ router.get('/reviews/:type/:id', async function (req, res) {
       distribution
     });
   } catch (err) {
-    console.error('Error fetching reviews:', err);
+    req.log.error({ err, type, id }, 'Error fetching reviews');
     res.status(500).json({ error: 'fetch_failed' });
   }
 });
@@ -151,14 +152,14 @@ router.post('/review', async function (req, res) {
     });
 
     await review.save();
-
+    req.log.info({ productId, productType, rating }, 'Review submitted');
     res.json({
       success: true,
       message: 'Review submitted successfully',
       review
     });
   } catch (err) {
-    console.error('Error saving review:', err);
+    req.log.error({ err, productId, productType }, 'Error saving review');
     res.status(500).json({ error: 'save_failed' });
   }
 });
@@ -180,7 +181,7 @@ router.post('/review/:id/helpful', async function (req, res) {
 
     res.json({ success: true, helpful: review.helpful });
   } catch (err) {
-    console.error('Error updating helpful count:', err);
+    req.log.error({ err, id }, 'Error updating helpful count');
     res.status(500).json({ error: 'update_failed' });
   }
 });

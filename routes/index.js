@@ -26,13 +26,12 @@ router.get('/home', function (req, res) {
 
 /* GET /browse - show all products (dogfoods + supplies) */
 router.get('/browse', async function (req, res) {
-  console.log('Browse route hit');
+  req.log.info('Browse route hit');
   try {
     const dogfoods = await canine.find().lean().exec();
     const suppliesList = await supplies.find().lean().exec();
 
-    console.log('Found dogfoods:', dogfoods.length);
-    console.log('Found supplies:', suppliesList.length);
+    req.log.debug({ dogfoods: dogfoods.length, supplies: suppliesList.length }, 'Browse counts');
 
     // normalize items with a type so Add-to-cart links can target the right route
     const products = [];
@@ -42,19 +41,17 @@ router.get('/browse', async function (req, res) {
     // render a browse view which lists all products
     res.render('shop/browse', { title: 'Browse All Products', products });
   } catch (err) {
-    console.error('Browse error', err);
+    req.log.error({ err }, 'Browse error');
     res.status(500).render('shop/browse', { title: 'Browse Products', products: [] });
   }
 });
 
 /* GET Dog Food Brands Page */
 router.get('/shop/dogfoods', function (req, res) {
-  console.log('Dog foods route hit');
-  console.log('isAuthenticated in route:', req.isAuthenticated());
-  console.log('res.locals.isAuthenticated:', res.locals.isAuthenticated);
+  req.log.info({ isAuthenticated: req.isAuthenticated() }, 'Dog foods route hit');
   canine.find().exec(function (err, docs) {
     if (err) {
-      console.error('Error fetching dogfoods:', err);
+      req.log.error({ err }, 'Error fetching dogfoods');
       return res.render('shop/index', { title: 'Dog Food Brands', diets: [] });
     }
     const productChunks = [];
@@ -62,8 +59,7 @@ router.get('/shop/dogfoods', function (req, res) {
     for (let i = 0; i < docs.length; i += chunkSize) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
-    console.log('Rendering dogfoods, chunks:', productChunks.length);
-    console.log('About to render with isAuthenticated:', res.locals.isAuthenticated);
+    req.log.debug({ chunks: productChunks.length, isAuthenticated: res.locals.isAuthenticated }, 'Rendering dogfoods');
     res.render('shop/index', { title: 'Dog Food Brands', diets: productChunks });
   });
 });
@@ -71,7 +67,7 @@ router.get('/shop/dogfoods', function (req, res) {
 /* GET product detail page */
 router.get('/product/:type/:id', async function (req, res) {
   const { type, id } = req.params;
-  console.log('Product detail route hit:', type, id);
+  req.log.info({ type, id }, 'Product detail route hit');
 
   try {
     let product = null;
@@ -89,9 +85,7 @@ router.get('/product/:type/:id', async function (req, res) {
       return res.status(404).render('error', { message: 'Product not found' });
     }
 
-    console.log('Raw product fields:', Object.keys(product));
-    console.log('product.title:', product.title);
-    console.log('product.Title:', product.Title);
+    req.log.debug({ keys: Object.keys(product) }, 'Raw product fields');
 
     // Normalize fields
     product._type = productType;
@@ -102,16 +96,14 @@ router.get('/product/:type/:id', async function (req, res) {
     product.displayDescription = product.longDescription || product.detailedDescription || product.description
             || (`${product.displayTitle} - High quality product for your beloved pets.`);
 
-    console.log('Product loaded:', product.displayTitle);
-    console.log('Display price:', product.displayPrice);
-    console.log('Using long description:', !!product.longDescription);
+    req.log.info({ title: product.displayTitle, price: product.displayPrice, hasLongDescription: !!product.longDescription }, 'Product loaded');
 
     res.render('shop/product-detail', {
       title: product.displayTitle,
       product
     });
   } catch (err) {
-    console.error('Product detail error:', err);
+    req.log.error({ err }, 'Product detail error');
     res.status(500).render('error', { message: 'Error loading product' });
   }
 });
@@ -141,7 +133,7 @@ router.get('/shop/search-result', function (req, res) {
       };
       client.search({ index: 'dogfoods', body })
         .then(function (results) {
-          console.log('No hits in Redis! Data from elasticsearch/mongo');
+          req.log.debug('No hits in Redis! Data from elasticsearch/mongo');
           const data = [];
           if (results.hits && results.hits.hits) {
             results.hits.hits.forEach(function (hit) {
@@ -151,7 +143,7 @@ router.get('/shop/search-result', function (req, res) {
               data.push(item);
             });
             redisClient.set(query, JSON.stringify(results.hits.hits));
-            console.log('Data Set in Redis!');
+            req.log.debug('Data Set in Redis!');
           } else if (results.body && results.body.hits && results.body.hits.hits) {
             results.body.hits.hits.forEach(function (hit) {
               const item = { ...hit._source };
@@ -160,15 +152,15 @@ router.get('/shop/search-result', function (req, res) {
               data.push(item);
             });
             redisClient.set(query, JSON.stringify(results.body.hits.hits));
-            console.log('Data Set in Redis!');
+            req.log.debug('Data Set in Redis!');
           }
-          console.log('Found', data.length, 'results');
+          req.log.info({ count: data.length, query }, 'Search results');
           res.render('shop/search-result', {
             data
           });
         })
         .catch((err) => {
-          console.log(err);
+          req.log.error({ err, query }, 'Elasticsearch search error');
           res.send({ error: err });
         });
     } else {
@@ -178,7 +170,7 @@ router.get('/shop/search-result', function (req, res) {
         item._id = o._id;
         item._type = 'dogfood';
         data.push(item);
-        console.log('Data Pulled from Redis!');
+        req.log.debug('Data Pulled from Redis!');
       });
       res.render('shop/search-result', {
         data
@@ -186,7 +178,7 @@ router.get('/shop/search-result', function (req, res) {
       });
     }
   }).catch(function (err) {
-    console.log(err);
+    req.log.error({ err, query }, 'Search route error');
   });
 });
 
