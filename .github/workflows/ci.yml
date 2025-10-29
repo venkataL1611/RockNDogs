@@ -1,13 +1,25 @@
 name: CI/CD Pipeline
 
 on:
+  # Only build on pushes to main (and releases/tags). Avoids duplicate runs when a PR is open.
   push:
     branches:
-      - '**'      # run on pushes to any branch
+      - main
+      - 'release/**'
+      - 'hotfix/**'
+    tags:
+      - 'v*.*.*'
+  # Run CI for PRs targeting main
   pull_request:
     branches:
-      - '**'      # run on PRs targeting any branch
-  workflow_dispatch: {}  # allow manual runs from the Actions tab
+      - main
+  # Allow manual runs from the Actions tab
+  workflow_dispatch: {}
+
+# Cancel previous runs for the same ref/PR to save minutes and avoid noisy duplicates
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write      # Required to push manifest updates back to repo
