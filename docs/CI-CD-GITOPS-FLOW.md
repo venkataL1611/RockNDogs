@@ -1,72 +1,39 @@
 # CI/CD and GitOps Flow
 
-This document explains how the automated CI/CD pipeline works with ArgoCD for RockNDogs, covering PR workflows, deployments to production, and local development patterns.
+This guide documents how code moves from commit to running in Kubernetes using GitHub Actions, GHCR, and ArgoCD. It also includes rollback, validation, and troubleshooting steps.
 
 ## Overview
 
-RockNDogs uses a GitOps approach with GitHub Actions for CI/CD and ArgoCD for Kubernetes deployments:
+RockNDogs uses GitOps with GitHub Actions for CI/CD and ArgoCD for Kubernetes deployments:
 
-- **GitHub Actions**: Runs quality gates (lint, test, security) on every PR and push
-- **GitHub Container Registry (GHCR)**: Stores production Docker images
-- **ArgoCD**: Continuously monitors the `k8s/` directory on `main` and auto-syncs to the cluster
+- GitHub Actions: quality gates (lint, unit, E2E, security) on PRs; builds on main
+- GitHub Container Registry (GHCR): stores multi-arch Docker images
+- ArgoCD: watches `k8s/` on `main` and auto-syncs to the cluster
 
-## Flow Diagram
+## Diagram (Mermaid)
 
-```
-┌──────────────┐
-│ Developer    │
-│ creates PR   │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────────────┐
-│ GitHub Actions       │
-│ - Lint               │
-│ - Unit Tests         │
-│ - E2E Tests          │
-│ - Security Audit     │
-└──────────────────────┘
-       │
-       │ (PR approved & merged to main)
-       ▼
-┌──────────────────────┐
-│ GitHub Actions       │
-│ - Build Docker image │
-│ - Push to GHCR       │
-│ - Update k8s/        │
-│   deployment.yaml    │
-│ - Commit & push      │
-└──────┬───────────────┘
-       │
-       │ (manifest updated on main)
-       ▼
-┌──────────────────────┐
-│ ArgoCD               │
-│ - Detects change     │
-│ - Pulls new image    │
-│ - Syncs to cluster   │
-│ - Health checks      │
-└──────────────────────┘
-       │
-       ▼
-┌──────────────────────┐
-│ Kubernetes Cluster   │
-│ - Rolling update     │
-│ - Zero downtime      │
-│ - New version live   │
-└──────────────────────┘
+```mermaid
+flowchart LR
+  A[Commit to main] --> B[GitHub Actions]
+  B --> C[Build multi-arch image]
+  C --> D[Push to GHCR\n ghcr.io/<owner_lc>/rockndogs:<short-sha>]
+  D --> E[Update k8s/deployment.yaml]
+  E --> F[Commit to main \n [skip ci]]
+  F --> G[ArgoCD detects change]
+  G --> H[Sync to cluster]
+  H --> I[Kubernetes rolling update]
+  I --> J[New pods Healthy]
 ```
 
 ## Detailed Workflow
 
-### 1. Pull Request (Feature Branch → main)
+### 1. Pull Request (feature/\* → main)
 
 When you open a PR or push to any branch:
 
 ```yaml
 Triggered by:
-  - push to any branch
-  - pull_request targeting any branch
+  - pull_request targeting main
 ```
 
 **Jobs that run:**
@@ -84,7 +51,7 @@ Triggered by:
 
 **Why?** PRs are for validation only. We don't deploy feature branches.
 
-### 2. Merge to Main
+### 2. Merge to main
 
 When a PR is merged to `main`:
 
@@ -99,10 +66,10 @@ Triggered by:
 
 2. **docker-build** (needs: lint, test, security)
    - Logs into GitHub Container Registry (GHCR)
-   - Builds Docker image with multi-stage build
+   - Builds multi-arch Docker image (linux/amd64, linux/arm64)
    - Tags image with:
-     - Short SHA: `ghcr.io/venkataL1611/rockndogs:<7-char-sha>`
-     - Latest: `ghcr.io/venkataL1611/rockndogs:latest` (only on main)
+     - Short SHA: `ghcr.io/<owner_lower>/rockndogs:<7-char-sha>`
+     - Latest: `ghcr.io/<owner_lower>/rockndogs:latest` (only on main)
    - Pushes to GHCR
    - Uses layer caching for fast builds
 
@@ -121,7 +88,7 @@ Triggered by:
    - Placeholder for future production environment
    - Requires manual approval via GitHub Environments
 
-### 3. ArgoCD Auto-Sync
+### 3. ArgoCD auto-sync
 
 ArgoCD is configured to watch the `k8s/` directory on `main`:
 
@@ -130,7 +97,7 @@ ArgoCD is configured to watch the `k8s/` directory on `main`:
 spec:
   source:
     repoURL: https://github.com/venkataL1611/RockNDogs.git
-    targetRevision: HEAD # tracks main branch
+  targetRevision: main
     path: k8s
 
   syncPolicy:
@@ -155,15 +122,15 @@ kubectl get applications -n argocd -o wide
 # Or via ArgoCD UI: https://localhost:8080
 ```
 
-## Image Tagging Strategy
+## Image tagging strategy
 
 ### Production (main branch)
 
 Images are tagged with the **short Git SHA** (7 characters):
 
 ```
-ghcr.io/venkataL1611/rockndogs:a1b2c3d
-ghcr.io/venkataL1611/rockndogs:latest
+ghcr.io/<owner_lower>/rockndogs:a1b2c3d
+ghcr.io/<owner_lower>/rockndogs:latest
 ```
 
 **Why SHA?**
@@ -180,7 +147,7 @@ spec:
     spec:
       containers:
         - name: rockndogs
-          image: ghcr.io/venkataL1611/rockndogs:a1b2c3d
+          image: ghcr.io/<owner_lower>/rockndogs:a1b2c3d
           imagePullPolicy: IfNotPresent
 ```
 
@@ -214,7 +181,7 @@ permissions:
 
 The default `GITHUB_TOKEN` is automatically provided by GitHub Actions.
 
-## Manual Deployment (Workflow Dispatch)
+## Manual deployment (workflow_dispatch)
 
 You can trigger a deployment manually from GitHub:
 
@@ -270,9 +237,9 @@ kubectl rollout undo deployment/rockndogs-app -n rockndogs --to-revision=3
 4. Select previous revision
 5. Click **Rollback**
 
-## Monitoring Deployments
+## Monitoring deployments
 
-### Check CI/CD Pipeline Status
+### Check CI/CD pipeline status
 
 ```bash
 # Via GitHub CLI
@@ -284,7 +251,7 @@ gh run view <run-id>
 
 Or visit: https://github.com/venkataL1611/RockNDogs/actions
 
-### Check ArgoCD Sync Status
+### Check ArgoCD sync status
 
 ```bash
 # Get application status
@@ -298,7 +265,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 # Visit: https://localhost:8080
 ```
 
-### Check Deployment Status
+### Check deployment status
 
 ```bash
 # Current deployment
@@ -314,7 +281,7 @@ kubectl rollout status deployment/rockndogs-app -n rockndogs
 kubectl get deployment rockndogs-app -n rockndogs -o jsonpath='{.spec.template.spec.containers[0].image}'
 ```
 
-### Check Image in GHCR
+### Check image in GHCR
 
 Visit: https://github.com/venkataL1611?tab=packages
 
@@ -407,15 +374,15 @@ kubectl patch application rockndogs -n argocd \
 git commit -m "chore(deploy): update image to <sha> [skip ci]"
 ```
 
-## Best Practices
+## Best practices
 
-### Branch Strategy
+### Branch strategy
 
 - **main**: Production branch, protected, requires PR reviews
 - **develop**: Integration branch for features (optional)
 - **feature/\***: Feature branches, merge to main via PR
 
-### Commit Conventions
+### Commit conventions
 
 Use conventional commits for clear history:
 
@@ -426,7 +393,7 @@ chore(deploy): update image to a1b2c3d [skip ci]
 docs: update CI/CD flow documentation
 ```
 
-### Environment Variables
+### Environment variables
 
 - **ConfigMap** (`k8s/configmap.yaml`): Non-sensitive config (URLs, feature flags)
 - **Secret** (`k8s/secret.yaml`): Sensitive data (passwords, API keys)
@@ -465,7 +432,7 @@ For production:
 - **ArgoCD Password**: Stored in `argocd-initial-admin-secret`. Change it after first login
 - **Secrets**: Never commit secrets to Git. Use GitHub Secrets or Kubernetes Secrets
 
-## Next Steps
+## Next steps
 
 - [ ] Add semantic versioning tags (in addition to SHA tags)
 - [ ] Implement proper staging/production environments with manual approval

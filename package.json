@@ -20,6 +20,9 @@
     "load:products": "autocannon -c 5 -d 15 http://localhost:3000/product/dogfood"
   },
   "dependencies": {
+    "pino": "^8.17.0",
+    "pino-http": "^9.0.0",
+    "pino-elasticsearch": "^8.0.0",
     "@elastic/elasticsearch": "^7.17.14",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.66.0",
@@ -56,6 +59,7 @@
   "description": "An Ecommerce Website",
   "main": "Web",
   "devDependencies": {
+    "pino-pretty": "^11.0.0",
     "autocannon": "^8.0.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",

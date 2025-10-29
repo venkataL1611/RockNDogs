@@ -12,6 +12,7 @@ Tested on: macOS + Docker Desktop + minikube (Docker driver)
 - minikube
 
 Optional:
+
 - jq (for pretty JSON)
 - ArgoCD CLI (not required for this guide)
 
@@ -29,6 +30,7 @@ kubectl get nodes
 ```
 
 Notes:
+
 - Using the Docker driver on macOS means some commands (like `minikube service --url`) keep a terminal open; you can use `kubectl port-forward` instead.
 
 ## 2) Install ArgoCD
@@ -60,6 +62,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
 Open the UI at https://localhost:8080 and log in as:
+
 - Username: `admin`
 - Password: output from the command above
 
@@ -103,9 +106,9 @@ spec:
   template:
     spec:
       containers:
-      - name: rockndogs
-        image: rockndogs:v7
-        imagePullPolicy: IfNotPresent
+        - name: rockndogs
+          image: rockndogs:v7
+          imagePullPolicy: IfNotPresent
 ```
 
 Commit and push so ArgoCD syncs:
@@ -132,6 +135,7 @@ kubectl get secret rockndogs-secrets -n rockndogs -o yaml
 ```
 
 Expect these env vars (from `k8s/configmap.yaml`):
+
 - `MONGODB_URI=mongodb://mongodb:27017/shopping`
 - `ELASTICSEARCH_URL=http://elasticsearch:9200`
 - `REDIS_HOST=redis`, `REDIS_PORT=6379`
@@ -156,6 +160,41 @@ kubectl get deploy -n rockndogs rockndogs-app -o json | \
 ## 8) Access the RockNDogs service
 
 ---
+
+Two easy ways:
+
+1. Port-forward the ClusterIP Service (recommended for local dev)
+
+```zsh
+kubectl port-forward -n rockndogs svc/rockndogs-service 3000:80
+# Visit http://localhost:3000
+```
+
+2. Use Ingress (requires an Ingress Controller, e.g., nginx)
+
+- Install nginx ingress (if you don't have it):
+  - minikube: `minikube addons enable ingress`
+  - generic: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.3/deploy/static/provider/cloud/deploy.yaml`
+
+- Apply the ingress manifest (already in repo):
+
+```zsh
+kubectl apply -f k8s/ingress.yaml
+```
+
+- Map the host to your cluster IP in /etc/hosts:
+
+```zsh
+# For minikube
+MINIKUBE_IP=$(minikube ip)
+echo "$MINIKUBE_IP rockndogs.local" | sudo tee -a /etc/hosts
+
+# For Docker Desktop Kubernetes, use 127.0.0.1 if the ingress controller publishes locally
+```
+
+- Visit http://rockndogs.local
+
+Note: If you prefer not to edit /etc/hosts, stick to port-forward.
 
 ## Understanding Kubernetes Networking (The Confusing Parts Explained)
 
@@ -197,11 +236,12 @@ spec:
   selector:
     app: rockndogs
   ports:
-  - port: 80          # Service listens on port 80
-    targetPort: 3000  # Forwards to pod's port 3000
+    - port: 80 # Service listens on port 80
+      targetPort: 3000 # Forwards to pod's port 3000
 ```
 
 Now pods **inside the cluster** can talk to each other using DNS:
+
 - `http://elasticsearch:9200` ✅
 - `http://mongodb:27017` ✅
 - `http://rockndogs-service:80` ✅
@@ -215,27 +255,33 @@ But your Mac browser still can't reach these! They're only accessible **inside**
 Kubernetes has 3 ways to expose services:
 
 #### Option A: ClusterIP (Default - Internal Only)
+
 ```yaml
 spec:
-  type: ClusterIP  # Only reachable inside cluster
+  type: ClusterIP # Only reachable inside cluster
 ```
+
 - ❌ Can't access from Mac browser
 - ✅ Pods can talk to each other
 
 #### Option B: NodePort (Expose on minikube Node)
+
 ```yaml
 spec:
-  type: NodePort  # Exposes on a high port (30000-32767)
+  type: NodePort # Exposes on a high port (30000-32767)
 ```
+
 - Service gets exposed on: `<minikube-ip>:<random-high-port>`
 - Example: `192.168.49.2:30736`
 - ❌ **Problem**: `192.168.49.2` is inside Docker, not reachable from Mac browser!
 
 #### Option C: LoadBalancer (Needs External Tool)
+
 ```yaml
 spec:
-  type: LoadBalancer  # Requests an external IP
+  type: LoadBalancer # Requests an external IP
 ```
+
 - On AWS/GCP/Azure: Creates a real load balancer with public IP ✅
 - On minikube: Status stays `<pending>` unless you run `minikube tunnel` ⚠️
 
@@ -254,6 +300,7 @@ kubectl port-forward -n rockndogs svc/rockndogs-service 3000:80
 ```
 
 What this does:
+
 ```
 Your Mac browser (localhost:3000)
        ↓
@@ -271,11 +318,13 @@ Pod (rockndogs-app:3000)
 - **Your URL**: `http://localhost:3000` ⭐
 
 **To run in background:**
+
 ```zsh
 kubectl port-forward -n rockndogs svc/rockndogs-service 3000:80 > /tmp/port-forward.log 2>&1 &
 ```
 
 **To stop:**
+
 ```zsh
 # Find the process
 ps aux | grep "[k]ubectl port-forward"
@@ -292,11 +341,13 @@ minikube service rockndogs-service -n rockndogs --url
 ```
 
 This creates a similar tunnel but:
+
 - ❌ Terminal must stay open with this exact command running
 - ❌ Gives you a random port each time
 - ✅ Shows you the URL to copy
 
 Output:
+
 ```
 http://127.0.0.1:54321
 ❗ Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
@@ -313,12 +364,14 @@ minikube tunnel
 ```
 
 What this does:
+
 - Runs as a background process
 - Assigns `127.0.0.1` as EXTERNAL-IP for LoadBalancer services
 - ⚠️ Requires **sudo password** if service uses privileged ports (80, 443)
 - ❌ More complex than port-forward
 
 Check if it worked:
+
 ```zsh
 kubectl get svc -n rockndogs
 # Should show EXTERNAL-IP: 127.0.0.1
@@ -327,6 +380,7 @@ kubectl get svc -n rockndogs
 Then visit: `http://127.0.0.1` (port 80) or `http://127.0.0.1:80`
 
 **Caveats:**
+
 - Requires sudo for port 80
 - Must keep running in background
 - Can conflict with other services on port 80
@@ -335,11 +389,11 @@ Then visit: `http://127.0.0.1` (port 80) or `http://127.0.0.1:80`
 
 ### Summary: Which Method Should I Use?
 
-| Method | When to Use | Pros | Cons |
-|--------|-------------|------|------|
-| **kubectl port-forward** ⭐ | Local development, testing | Simple, no sudo, stable URL | Terminal must stay open |
-| **minikube service --url** | Quick one-time test | Auto-detects service | Random port, terminal must stay open |
-| **minikube tunnel** | Using LoadBalancer type | Closest to production setup | Requires sudo, complex |
+| Method                      | When to Use                | Pros                        | Cons                                 |
+| --------------------------- | -------------------------- | --------------------------- | ------------------------------------ |
+| **kubectl port-forward** ⭐ | Local development, testing | Simple, no sudo, stable URL | Terminal must stay open              |
+| **minikube service --url**  | Quick one-time test        | Auto-detects service        | Random port, terminal must stay open |
+| **minikube tunnel**         | Using LoadBalancer type    | Closest to production setup | Requires sudo, complex               |
 
 **For RockNDogs, we use port-forward:**
 
@@ -358,16 +412,19 @@ kubectl port-forward -n rockndogs svc/rockndogs-service 3000:80 > /tmp/port-forw
 **Can't connect to localhost:3000?**
 
 1. Check if port-forward is running:
+
 ```zsh
 ps aux | grep "[k]ubectl port-forward"
 ```
 
 2. Check if port 3000 is in use:
+
 ```zsh
 lsof -i :3000
 ```
 
 3. Restart port-forward:
+
 ```zsh
 # Kill existing
 pkill -f "kubectl port-forward.*rockndogs-service"
@@ -377,6 +434,7 @@ kubectl port-forward -n rockndogs svc/rockndogs-service 3000:80 > /tmp/port-forw
 ```
 
 4. Check port-forward logs:
+
 ```zsh
 tail -f /tmp/port-forward.log
 ```
@@ -384,12 +442,14 @@ tail -f /tmp/port-forward.log
 **Service shows "connection refused"?**
 
 Check if pods are running:
+
 ```zsh
 kubectl get pods -n rockndogs
 # Should show READY 1/1, STATUS Running
 ```
 
 Check pod logs:
+
 ```zsh
 kubectl logs -n rockndogs -l app=rockndogs --tail=50
 ```
@@ -530,6 +590,7 @@ minikube delete
 ## Appendix: Quick reference of commands used in this project
 
 - Cluster + ArgoCD
+
 ```zsh
 minikube start --driver=docker --memory=4096 --cpus=2
 kubectl create namespace argocd
@@ -541,6 +602,7 @@ kubectl get applications -n argocd -o wide
 ```
 
 - App + dependencies
+
 ```zsh
 kubectl apply -f k8s/namespace.yaml
 kubectl get ns rockndogs
@@ -560,6 +622,7 @@ kubectl rollout status deployment/rockndogs-app -n rockndogs
 ```
 
 - Services and access
+
 ```zsh
 kubectl get svc -n rockndogs rockndogs-service -o wide
 kubectl get svc -n rockndogs rockndogs-service -o jsonpath='{.spec.ports[0].nodePort}'
@@ -569,12 +632,14 @@ minikube service rockndogs-service -n rockndogs --url
 ```
 
 - In-cluster tests
+
 ```zsh
 kubectl run -n rockndogs curl-app --image=curlimages/curl:latest --rm -i --restart=Never -- curl -s -o /dev/null -w "%{http_code}\n" http://rockndogs-service
 kubectl run -n rockndogs curl-es --image=curlimages/curl:latest --rm -it --restart=Never -- curl -v http://elasticsearch:9200
 ```
 
 - Seeding + indexing
+
 ```zsh
 APP_POD=$(kubectl get pods -n rockndogs -l app=rockndogs -o jsonpath='{.items[0].metadata.name}')
 kubectl exec -it -n rockndogs $APP_POD -- sh -c 'node seed/category-seeder.js'

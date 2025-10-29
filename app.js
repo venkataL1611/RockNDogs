@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+// Structured logging
 const expressHbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -14,11 +14,22 @@ require('./config/passport');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
+const { httpLogger, log } = require('./lib/logger');
 
 const indexRouter = require('./routes/index');
 
 const app = express();
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping');
+// Mongo connection logging
+mongoose.connection.on('connected', () => {
+  log.info({ mongoUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping' }, 'MongoDB connected');
+});
+mongoose.connection.on('error', (err) => {
+  log.error({ err }, 'MongoDB connection error');
+});
+mongoose.connection.on('disconnected', () => {
+  log.warn('MongoDB disconnected');
+});
 
 // view engine setup
 app.engine('.hbs', expressHbs({
@@ -88,7 +99,8 @@ const apiLimiter = rateLimit({
   legacyHeaders: false
 });
 
-app.use(logger('dev'));
+// Request logging (JSON/pretty depending on env)
+app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -133,11 +145,9 @@ app.use(function (req, res, next) {
   res.locals.cart = req.session.cart || { totalQty: 0, totalPrice: 0, items: [] };
   res.locals.year = new Date().getFullYear();
 
-  // Debug logging
+  // Debug logging for shop/product routes
   if (req.path.includes('/shop/') || req.path.includes('/product/')) {
-    console.log('Request path:', req.path);
-    console.log('isAuthenticated:', res.locals.isAuthenticated);
-    console.log('User:', req.user ? req.user.email : 'none');
+    log.debug({ path: req.path, isAuthenticated: res.locals.isAuthenticated, user: req.user ? req.user.email : 'none' }, 'Shop/Product request');
   }
 
   next();
@@ -177,6 +187,8 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  // Log the error with request context
+  log.error({ err }, 'Unhandled error');
   res.render('error');
 });
 
