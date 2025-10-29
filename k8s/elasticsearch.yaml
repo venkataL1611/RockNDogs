@@ -28,7 +28,8 @@ spec:
           mountPath: /usr/share/elasticsearch/data
       volumes:
       - name: es-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: elasticsearch-pvc
 ---
 apiVersion: v1
 kind: Service

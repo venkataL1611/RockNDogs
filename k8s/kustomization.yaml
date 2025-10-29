@@ -5,6 +5,8 @@ resources:
   - namespace.yaml
   - configmap.yaml
   - secret.yaml
+  - pvc/mongodb-pvc.yaml
+  - pvc/elasticsearch-pvc.yaml
   - mongodb.yaml
   - redis.yaml
   - elasticsearch.yaml
