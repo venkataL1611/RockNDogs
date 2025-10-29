@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: rockndogs
-        image: ghcr.io/venkatal1611/rockndogs:5aaa980
+        image: ghcr.io/venkatal1611/rockndogs:41b5145
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
