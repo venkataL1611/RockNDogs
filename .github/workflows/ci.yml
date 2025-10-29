@@ -1,13 +1,25 @@
 name: CI/CD Pipeline
 
 on:
+  # Only build on pushes to main (and releases/tags). Avoids duplicate runs when a PR is open.
   push:
     branches:
-      - '**'      # run on pushes to any branch
+      - main
+      - 'release/**'
+      - 'hotfix/**'
+    tags:
+      - 'v*.*.*'
+  # Run CI for PRs targeting main
   pull_request:
     branches:
-      - '**'      # run on PRs targeting any branch
-  workflow_dispatch: {}  # allow manual runs from the Actions tab
+      - main
+  # Allow manual runs from the Actions tab
+  workflow_dispatch: {}
+
+# Cancel previous runs for the same ref/PR to save minutes and avoid noisy duplicates
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write      # Required to push manifest updates back to repo
@@ -164,6 +176,9 @@ jobs:
     
     - name: Install production dependencies
       run: npm ci --production
+      env:
+        # Disable husky in CI for production installs (devDependencies not installed)
+        HUSKY: "0"
     
     - name: Create deployment package
       run: |
@@ -215,11 +230,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Set up QEMU (multi-arch emulation)
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64,amd64
+
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     
     - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -233,7 +253,7 @@ jobs:
     
     - name: Extract metadata for Docker
       id: meta
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v5
       with:
         images: ghcr.io/${{ steps.repo.outputs.owner_lc }}/rockndogs
         tags: |
@@ -241,10 +261,11 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
     
     - name: Build and push Docker image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v6
       with:
         context: .
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
