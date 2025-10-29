@@ -175,7 +175,7 @@ jobs:
         cache: 'npm'
     
     - name: Install production dependencies
-      run: npm ci --production
+      run: npm ci --omit=dev
       env:
         # Disable husky in CI for production installs (devDependencies not installed)
         HUSKY: "0"

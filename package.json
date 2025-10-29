@@ -13,7 +13,7 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky install",
+    "prepare": "if [ -x node_modules/.bin/husky ]; then node_modules/.bin/husky install; else echo 'husky not installed (prod install or missing devDeps) – skipping'; fi",
     "pretest": "chmod +x tests/setup.sh && tests/setup.sh",
     "load:test": "autocannon -c 10 -d 30 http://localhost:3000",
     "load:search": "autocannon -c 10 -d 20 http://localhost:3000/shop/search-result?q=food",
