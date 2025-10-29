@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: rockndogs
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret.yaml
+  - mongodb.yaml
+  - redis.yaml
+  - elasticsearch.yaml
+  - kibana.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+# Note: Fluent Bit is in a separate namespace (logging), apply it separately:
+# kubectl apply -f k8s/logging/fluent-bit.yaml
+# 
+# We intentionally do NOT include argocd-application.yaml here to avoid
+# ArgoCD trying to apply itself when this directory is used as a Kustomize app.
