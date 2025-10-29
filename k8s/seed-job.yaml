@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rockndogs-seed
+  namespace: rockndogs
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: seeder
+        image: ghcr.io/venkatal1611/rockndogs:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Seeding categories..."
+            node seed/category-seeder.js
+            echo "Seeding products..."
+            node seed/product-seeder.js
+            echo "Seeding supplies..."
+            node seed/supply-seeder\ .js
+            echo "Done seeding!"
+        env:
+        - name: MONGODB_URI
+          valueFrom:
+            configMapKeyRef:
+              name: rockndogs-config
+              key: MONGODB_URI
+        - name: ELASTICSEARCH_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rockndogs-config
+              key: ELASTICSEARCH_URL
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rockndogs-config
+              key: REDIS_HOST
+        - name: SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: rockndogs-secrets
+              key: SESSION_SECRET

@@ -18,6 +18,27 @@ spec:
           image: docker.elastic.co/kibana/kibana:7.17.14
           ports:
             - containerPort: 5601
+          startupProbe:
+            httpGet:
+              path: /api/status
+              port: 5601
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /api/status
+              port: 5601
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /api/status
+              port: 5601
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 6
           env:
             - name: ELASTICSEARCH_HOSTS
               value: "[\"http://elasticsearch:9200\"]"

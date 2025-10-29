@@ -1,5 +1,3 @@
-const mocha = require('mocha');
-const assert = require('assert');
 const mongoose = require('mongoose');
 
 const canine = require('../models/dogfood');
