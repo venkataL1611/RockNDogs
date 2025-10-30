@@ -78,11 +78,11 @@ router.get('/shop/dogfoods', async function (req, res) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
     req.log.debug({ 
-      chunks: productChunks.length, 
+      chunks: productChunks.length,
       isAuthenticated: res.locals.isAuthenticated,
       showDiscounts,
       discountPercentage
-    }, 'Rendering dogfoods');
+    }, 'Rendering dogfoods'); // eslint-disable-line max-len
     res.render('shop/index', { 
       title: 'Dog Food Brands', 
       diets: productChunks,

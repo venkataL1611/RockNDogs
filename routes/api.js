@@ -188,7 +188,7 @@ router.post('/review/:id/helpful', async function (req, res) {
 
 // Health check endpoint with Flagsmith status
 router.get('/health', async function (req, res) {
-  const { healthCheck } = require('../lib/flagsmith');
+  const { healthCheck } = require('../lib/flagsmith'); // eslint-disable-line global-require
   
   const health = {
     status: 'ok',
@@ -201,7 +201,7 @@ router.get('/health', async function (req, res) {
 
   // Check MongoDB
   try {
-    const mongoose = require('mongoose');
+    const mongoose = require('mongoose'); // eslint-disable-line global-require
     health.mongodb = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   } catch (err) {
     health.mongodb = 'error';

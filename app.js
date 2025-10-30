@@ -138,7 +138,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Flagsmith middleware - attach feature flags to request
-app.use(flagsmithMiddleware());
+app.use(flagsmithMiddleware()); // eslint-disable-line max-len
 
 // Expose auth/cart info to templates
 app.use(function (req, res, next) {
