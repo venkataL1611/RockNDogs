@@ -24,8 +24,8 @@ router.get('/home', async function (req, res) {
   // Example: Check feature flag for showing promotional banner
   const showPromo = await req.flags.isEnabled('show_promo_banner');
   const promoMessage = await req.flags.getValue('promo_message', 'Welcome to Rock N Dogs!');
-  
-  res.render('shop/home', { 
+
+  res.render('shop/home', {
     title: 'Welcome to Rock N Dogs',
     showPromo,
     promoMessage
@@ -57,16 +57,16 @@ router.get('/browse', async function (req, res) {
 /* GET Dog Food Brands Page */
 router.get('/shop/dogfoods', async function (req, res) {
   req.log.info({ isAuthenticated: req.isAuthenticated() }, 'Dog foods route hit');
-  
+
   // Example: Feature flag to show discounted products
   const showDiscounts = await req.flags.isEnabled('show_discounts');
   const discountPercentage = await req.flags.getValue('discount_percentage', 0);
-  
+
   canine.find().exec(function (err, docs) {
     if (err) {
       req.log.error({ err }, 'Error fetching dogfoods');
-      return res.render('shop/index', { 
-        title: 'Dog Food Brands', 
+      return res.render('shop/index', {
+        title: 'Dog Food Brands',
         diets: [],
         showDiscounts: false,
         discountPercentage: 0
@@ -77,14 +77,14 @@ router.get('/shop/dogfoods', async function (req, res) {
     for (let i = 0; i < docs.length; i += chunkSize) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
-    req.log.debug({ 
+    req.log.debug({
       chunks: productChunks.length,
       isAuthenticated: res.locals.isAuthenticated,
       showDiscounts,
       discountPercentage
     }, 'Rendering dogfoods'); // eslint-disable-line max-len
-    res.render('shop/index', { 
-      title: 'Dog Food Brands', 
+    res.render('shop/index', {
+      title: 'Dog Food Brands',
       diets: productChunks,
       showDiscounts,
       discountPercentage
@@ -124,7 +124,11 @@ router.get('/product/:type/:id', async function (req, res) {
     product.displayDescription = product.longDescription || product.detailedDescription || product.description
             || (`${product.displayTitle} - High quality product for your beloved pets.`);
 
-    req.log.info({ title: product.displayTitle, price: product.displayPrice, hasLongDescription: !!product.longDescription }, 'Product loaded');
+    req.log.info({
+      title: product.displayTitle,
+      price: product.displayPrice,
+      hasLongDescription: !!product.longDescription
+    }, 'Product loaded');
 
     res.render('shop/product-detail', {
       title: product.displayTitle,

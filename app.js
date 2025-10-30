@@ -154,7 +154,11 @@ app.use(function (req, res, next) {
 
   // Debug logging for shop/product routes
   if (req.path.includes('/shop/') || req.path.includes('/product/')) {
-    log.debug({ path: req.path, isAuthenticated: res.locals.isAuthenticated, user: req.user ? req.user.email : 'none' }, 'Shop/Product request');
+    log.debug({
+      path: req.path,
+      isAuthenticated: res.locals.isAuthenticated,
+      user: req.user ? req.user.email : 'none'
+    }, 'Shop/Product request');
   }
 
   next();

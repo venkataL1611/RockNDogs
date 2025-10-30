@@ -66,7 +66,11 @@ router.post(
           return next(loginErr);
         }
 
-        req.log.info({ email: user.email, sessionId: req.sessionID, isAuthenticated: req.isAuthenticated() }, 'User logged in');
+        req.log.info({
+          email: user.email,
+          sessionId: req.sessionID,
+          isAuthenticated: req.isAuthenticated()
+        }, 'User logged in');
 
         // Redirect to returnTo URL if it exists, otherwise go to home
         const returnTo = req.session.returnTo || '/';

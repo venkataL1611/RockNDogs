@@ -189,7 +189,7 @@ router.post('/review/:id/helpful', async function (req, res) {
 // Health check endpoint with Flagsmith status
 router.get('/health', async function (req, res) {
   const { healthCheck } = require('../lib/flagsmith'); // eslint-disable-line global-require
-  
+
   const health = {
     status: 'ok',
     timestamp: new Date().toISOString(),
