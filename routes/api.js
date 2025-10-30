@@ -186,4 +186,37 @@ router.post('/review/:id/helpful', async function (req, res) {
   }
 });
 
+// Health check endpoint with Flagsmith status
+router.get('/health', async function (req, res) {
+  const { healthCheck } = require('../lib/flagsmith');
+  
+  const health = {
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    mongodb: 'unknown',
+    elasticsearch: 'unknown',
+    flagsmith: await healthCheck()
+  };
+
+  // Check MongoDB
+  try {
+    const mongoose = require('mongoose');
+    health.mongodb = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  } catch (err) {
+    health.mongodb = 'error';
+  }
+
+  // Check Elasticsearch
+  try {
+    await client.ping();
+    health.elasticsearch = 'connected';
+  } catch (err) {
+    health.elasticsearch = 'disconnected';
+  }
+
+  const allHealthy = health.mongodb === 'connected' && health.elasticsearch === 'connected';
+  res.status(allHealthy ? 200 : 503).json(health);
+});
+
 module.exports = router;

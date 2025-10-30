@@ -13,3 +13,6 @@ data:
   # Disable secure cookies for HTTP port-forward access (minikube/local testing)
   SESSION_SECURE: "false"
   SESSION_SAME_SITE: "lax"
+  # Flagsmith feature flags - set to "false" to disable if no key provided
+  FLAGSMITH_ENABLED: "false"
+  FLAGSMITH_API_URL: "https://edge.api.flagsmith.com/api/v1/"

@@ -83,12 +83,28 @@ If you prefer not to use Docker, install MongoDB, Elasticsearch and Redis locall
 
 See also: `docs/CI-CD-GITOPS-FLOW.md` for diagrams, permissions, rollback, and troubleshooting.
 
-## Feature Flags
+## Feature Flags with Flagsmith
 
-- Feature flags enable/disable code paths at runtime (including % rollouts) without code changes.
-- Flags are supplied via an environment variable (e.g., `FEATURE_FLAGS_JSON`) and evaluated per request.
-- Server routes can gate logic via a helper (e.g., `req.isFlagOn('flagName')`), and views can toggle sections with `res.locals.flags`.
-- In Kubernetes, flags can be set in a ConfigMap and rolled out via GitOps.
+RockNDogs integrates [Flagsmith](https://flagsmith.com/) for feature flag management:
+
+- **Runtime Control**: Toggle features on/off without deploying code
+- **A/B Testing**: Test different variants and measure impact
+- **Gradual Rollouts**: Enable features for percentage of users
+- **User Segmentation**: Personalize experiences based on user traits
+- **Remote Config**: Change application behavior via dashboard
+
+### Quick Setup
+
+1. Sign up at [flagsmith.com](https://flagsmith.com/)
+2. Get your environment key
+3. Set `FLAGSMITH_ENV_KEY` in environment or Kubernetes secret
+4. Use flags in routes:
+   ```javascript
+   const enabled = await req.flags.isEnabled('my_feature');
+   const value = await req.flags.getValue('my_config', 'default');
+   ```
+
+See **[docs/FLAGSMITH.md](docs/FLAGSMITH.md)** for complete setup, examples, and best practices.
 
 ## Dependencies: dev vs prod
 

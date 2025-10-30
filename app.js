@@ -15,10 +15,14 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const { httpLogger, log } = require('./lib/logger');
+const { initializeFlagsmith, flagsmithMiddleware } = require('./lib/flagsmith');
 
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+// Initialize Flagsmith
+initializeFlagsmith();
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping');
 // Mongo connection logging
 mongoose.connection.on('connected', () => {
@@ -132,6 +136,9 @@ app.use(passport.session());
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1); // Trust first proxy
 }
+
+// Flagsmith middleware - attach feature flags to request
+app.use(flagsmithMiddleware());
 
 // Expose auth/cart info to templates
 app.use(function (req, res, next) {

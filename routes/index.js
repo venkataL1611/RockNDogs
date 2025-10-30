@@ -20,8 +20,16 @@ router.get('/', function (req, res) {
 });
 
 /* GET /home - show landing page */
-router.get('/home', function (req, res) {
-  res.render('shop/home', { title: 'Welcome to Rock N Dogs' });
+router.get('/home', async function (req, res) {
+  // Example: Check feature flag for showing promotional banner
+  const showPromo = await req.flags.isEnabled('show_promo_banner');
+  const promoMessage = await req.flags.getValue('promo_message', 'Welcome to Rock N Dogs!');
+  
+  res.render('shop/home', { 
+    title: 'Welcome to Rock N Dogs',
+    showPromo,
+    promoMessage
+  });
 });
 
 /* GET /browse - show all products (dogfoods + supplies) */
@@ -47,20 +55,40 @@ router.get('/browse', async function (req, res) {
 });
 
 /* GET Dog Food Brands Page */
-router.get('/shop/dogfoods', function (req, res) {
+router.get('/shop/dogfoods', async function (req, res) {
   req.log.info({ isAuthenticated: req.isAuthenticated() }, 'Dog foods route hit');
+  
+  // Example: Feature flag to show discounted products
+  const showDiscounts = await req.flags.isEnabled('show_discounts');
+  const discountPercentage = await req.flags.getValue('discount_percentage', 0);
+  
   canine.find().exec(function (err, docs) {
     if (err) {
       req.log.error({ err }, 'Error fetching dogfoods');
-      return res.render('shop/index', { title: 'Dog Food Brands', diets: [] });
+      return res.render('shop/index', { 
+        title: 'Dog Food Brands', 
+        diets: [],
+        showDiscounts: false,
+        discountPercentage: 0
+      });
     }
     const productChunks = [];
     const chunkSize = 3;
     for (let i = 0; i < docs.length; i += chunkSize) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
-    req.log.debug({ chunks: productChunks.length, isAuthenticated: res.locals.isAuthenticated }, 'Rendering dogfoods');
-    res.render('shop/index', { title: 'Dog Food Brands', diets: productChunks });
+    req.log.debug({ 
+      chunks: productChunks.length, 
+      isAuthenticated: res.locals.isAuthenticated,
+      showDiscounts,
+      discountPercentage
+    }, 'Rendering dogfoods');
+    res.render('shop/index', { 
+      title: 'Dog Food Brands', 
+      diets: productChunks,
+      showDiscounts,
+      discountPercentage
+    });
   });
 });
 

@@ -37,6 +37,11 @@ spec:
             secretKeyRef:
               name: rockndogs-secrets
               key: SESSION_SECRET
+        - name: FLAGSMITH_ENV_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rockndogs-secrets
+              key: FLAGSMITH_ENV_KEY
         envFrom:
         - configMapRef:
             name: rockndogs-config
